@@ -1,7 +1,6 @@
 .App {
-  text-align: center;
+  margin: 10px;
 }
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,4 +34,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.filters {
+  border: 1px solid black;
+  height: 15rem;
+  overflow: auto;
+}
+
+table {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.greenCol {
+  background: green;
+  color: white;
+}
+
+.redCol {
+  background: red;
+  color: white;
 }
