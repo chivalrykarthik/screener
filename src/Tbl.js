@@ -11,7 +11,7 @@ const Heading = ({ stock }) => {
     )
 }
 const Col = ({ stock, searchParams }) => {
-    const { name, filters } = stock;
+    const { Name, filters } = stock;
     const cols = Object.keys(filters);
     const processResult = (colName) => {
         const params = searchParams[colName];
@@ -23,7 +23,7 @@ const Col = ({ stock, searchParams }) => {
     }
     return (
         <>
-            <td>{name}</td>
+            <td>{Name}</td>
             {
                 cols.map(col => {
                     const className = processResult(col) || '';
