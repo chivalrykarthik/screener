@@ -1,23 +1,32 @@
+import { useState } from 'react';
 import operators from './operators';
 const Heading = ({ stock }) => {
     const { filters } = stock;
     const cols = Object.keys(filters);
     return (
         <>
-            <td>StockName</td>
-            {cols.map(col => <td>{col}</td>)}
-            <td>Action</td>
+            <th>StockName</th>
+            {cols.map(col => <th>{col}</th>)}
+            <th>Matches</th>
+            <th>Action</th>
         </>
     )
 }
 
 const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
+
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
-    const processResult = (colName) => {
+    let cnt = 0;
+    const processResult = (colName, key) => {
         const params = searchParams[colName];
+
         if (params && operators[params.operator]) {
-            return operators[params.operator](filters[colName], params.value) ? 'greenCol' : 'redCol';
+            const className = operators[params.operator](filters[colName], params.value) ? 'greenCol' : 'redCol';
+            if (className === 'greenCol') {
+                cnt++;
+            }
+            return className;
         }
         return;
     }
@@ -25,11 +34,12 @@ const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
         <>
             <td>{Name}</td>
             {
-                cols.map(col => {
-                    const className = processResult(col) || '';
+                cols.map((col, key) => {
+                    const className = processResult(col, key) || '';
                     return <td className={className} >{filters[col]}</td>;
                 })
             }
+            <td>{cnt}</td>
             <td><button onClick={deleteStock.bind(null, rowNum)}>Delete</button></td>
         </>
     )
@@ -56,6 +66,11 @@ const Tbl = ({ stocks, searchParams, deleteStock }) => {
                 <tbody>
                     {stocks.map((stock, rowNum) => <Rows stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
                 </tbody>
+                <thead>
+                    <tr bold="1">
+                        <Heading stock={stocks[0]} />
+                    </tr>
+                </thead>
             </table>
         </>
     )
