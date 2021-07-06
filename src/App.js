@@ -30,6 +30,7 @@ function App() {
     }, {});
     setSearch(searchObj);
   }
+
   const createFilters = (stocks) => {
     if (stocks?.length) {
       const firstRow = Object.keys(stocks[0].filters);
@@ -46,6 +47,7 @@ function App() {
       setFilters([]);
     }
   }
+
   const parseStocks = () => {
     try {
       let tmpStocks = JSON.parse(txt);
@@ -56,11 +58,16 @@ function App() {
       alert("Invlaid JSON")
     }
   }
+
+  const deleteStock = (key) => {
+    const newStocks = [...stocks.slice(0, key), ...stocks.slice(key + 1)]
+    setStocks(newStocks);
+  }
   return (
     <div className="App">
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
-      {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} />}
+      {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
     </div>
   );
 }
