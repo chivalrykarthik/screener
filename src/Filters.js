@@ -8,6 +8,9 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
             value = !checked;
         }
         updFilter(rowNum, name, value);
+        if ((name === 'operator' || name === 'value') && value) {
+            updFilter(rowNum, 'checked', true);
+        }
     }
     return (
         <div>
