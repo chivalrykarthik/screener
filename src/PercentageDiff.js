@@ -26,7 +26,7 @@ const DiffList = ({ precentages }) => {
 const PercentageDiff = ({ label }) => {
     const [vals, setVal] = useState('');
     const [precentages, setPrecentages] = useState([]);
-    const values = vals.split(/\s/).filter(v => v);
+    const values = vals.split(/\s/).filter(v => v).map(v => v.split(',').join(''));
     const onCalc = () => {
         const per = values.reduce((acc, val, key) => {
             let tmp = {
