@@ -23,7 +23,7 @@ const DiffList = ({ precentages }) => {
     )
 }
 
-const PercentageDiff = () => {
+const PercentageDiff = ({ label }) => {
     const [vals, setVal] = useState('');
     const [precentages, setPrecentages] = useState([]);
     const values = vals.split(',');
@@ -44,7 +44,7 @@ const PercentageDiff = () => {
     return (
         <>
             <div>
-                <h5>Calculate Diff:</h5>
+                <h6>{label}</h6>
                 <input type="text" onChange={e => setVal(e.target.value)} />
                 <button onClick={onCalc} >Calc</button>
                 <DiffList precentages={precentages} />
@@ -53,4 +53,25 @@ const PercentageDiff = () => {
     )
 }
 
-export default PercentageDiff;
+
+const AddDiff = () => {
+    const [cmps, setCmp] = useState([])
+    const addCmp = () => {
+        const label = prompt(`Enter diff name`);
+        if (!label) return;
+        setCmp([...cmps, { CmpName: PercentageDiff, label }])
+    }
+    return (
+        <div>
+            <h5>Calculate Diff:</h5>
+            <button onClick={addCmp}>Add</button>
+            <div style={{ display: "flex", justifyContent: "space-between", width: '90%', flexWrap: "wrap" }}>
+                {cmps.map(cmp => {
+                    const { CmpName, label } = cmp;
+                    return <CmpName label={label} />
+                })}
+            </div>
+        </div>
+    )
+}
+export default AddDiff;
