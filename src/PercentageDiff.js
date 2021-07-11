@@ -12,7 +12,7 @@ const DiffList = ({ precentages }) => {
                     return (
                         <tr>
                             <td>{percentage.val}</td>
-                            <td>{percentage.diff}</td>
+                            <td>{Math.round(percentage.diff)}%</td>
                         </tr>
                     );
                 })
@@ -26,7 +26,7 @@ const DiffList = ({ precentages }) => {
 const PercentageDiff = ({ label }) => {
     const [vals, setVal] = useState('');
     const [precentages, setPrecentages] = useState([]);
-    const values = vals.split(',');
+    const values = vals.split(/\s/).filter(v => v);
     const onCalc = () => {
         const per = values.reduce((acc, val, key) => {
             let tmp = {
