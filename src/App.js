@@ -4,6 +4,7 @@ import Txt from './Txt';
 import Filters from './Filters';
 import { useState } from 'react';
 import Tbl from './Tbl';
+import PercentageDiff from './PercentageDiff';
 function App() {
   const [txt, setTxt] = useState('');
   const [stocks, setStocks] = useState([]);
@@ -68,6 +69,7 @@ function App() {
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
       {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
+      <PercentageDiff />
     </div>
   );
 }
