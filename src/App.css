@@ -39,6 +39,7 @@
 .filters {
   border: 1px solid black;
   height: 15rem;
+
   overflow: auto;
 }
 
@@ -60,4 +61,51 @@ table {
 th {
   font-weight: bold;
   font-size: 0.79rem;
+}
+
+table {
+  border-spacing: 0;
+  table-layout: auto;
+}
+table td,
+table th {
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+}
+table thead th {
+  padding: 3px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 25vw;
+  background: white;
+}
+table td {
+  background: #fff;
+  padding: 4px 5px;
+  text-align: center;
+}
+
+table tbody th {
+  font-weight: 100;
+  font-style: italic;
+  text-align: left;
+  position: relative;
+}
+table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+table tbody th {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 1;
 }

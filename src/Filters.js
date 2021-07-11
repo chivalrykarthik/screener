@@ -13,32 +13,42 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
         }
     }
     return (
-        <div>
-            <input type="checkbox" onChange={handleChange} name='checked' checked={checked} />
-            <label>{label}</label>&nbsp;
-            <select name='operator' onChange={handleChange}>
-                <option value='>'>Greater</option>
-                <option value='>='>Greater & Equal</option>
-                <option value='<'>Less</option>
-                <option value='<='>Less & equal</option>
-                <option value='!='>Not equal</option>
-                <option value='=='>Equal</option>
-            </select>
-            <input type="text" placeholder='Value' name='value' value={value} onChange={handleChange} />
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "50%", margin: "0 0 5px 0" }}>
+            <div>
+                <input type="checkbox" onChange={handleChange} name='checked' checked={checked} />
+            </div>
+            <div style={{ width: "10em" }}>
+                <label>{label}</label>&nbsp;
+            </div>
+            <div style={{}}>
+                <select name='operator' onChange={handleChange}>
+                    <option value=''>Select</option>
+                    <option value='>'>Greater</option>
+                    <option value='>='>Greater & Equal</option>
+                    <option value='<'>Less</option>
+                    <option value='<='>Less & equal</option>
+                    <option value='!='>Not equal</option>
+                    <option value='=='>Equal</option>
+                </select>
+            </div>
+            <div style={{}}>
+                <input type="text" placeholder='Value' name='value' value={value} onChange={handleChange} />
+            </div>
         </div>
     )
 }
 const Filters = ({ filtersList, updFilter, addToSearch }) => {
     return (
         <>
+            <h5>Filters:</h5>
             <div className='filters'>
-                Filters:
+
                 {
                     filtersList.map((filter, key) => <Rows label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} />)
                 }
                 <br />
-                <button onClick={addToSearch.bind(null, filtersList)} >Filter</button>
             </div>
+            <button onClick={addToSearch.bind(null, filtersList)} >Filter</button>
         </>
     )
 }
