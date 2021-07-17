@@ -20,7 +20,7 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
             <div style={{ width: "10em" }}>
                 <label>{label}</label>&nbsp;
             </div>
-            <div style={{}}>
+            <div>
                 <select name='operator' onChange={handleChange}>
                     <option value=''>Select</option>
                     <option value='>'>Greater</option>
@@ -31,7 +31,7 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
                     <option value='=='>Equal</option>
                 </select>
             </div>
-            <div style={{}}>
+            <div>
                 <input
                     type="text"
                     placeholder='Value'

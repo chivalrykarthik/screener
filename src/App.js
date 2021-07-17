@@ -10,6 +10,7 @@ function App() {
   const [stocks, setStocks] = useState([]);
   const [filtersList, setFilters] = useState([]);
   const [searchParams, setSearch] = useState({});
+  const [filtersCnt, setFiltersCnt] = useState(0);
   const updFilter = (key, col, value) => {
     const tmp = [...filtersList];
     tmp[key][col] = value;
@@ -17,8 +18,10 @@ function App() {
   }
 
   const addToSearch = (filters) => {
+    let cnt = 0;
     const searchObj = filters.reduce((acc, val) => {
       if (val.checked) {
+        cnt++;
         let tmp = {
           [val.label]: {
             value: val.value,
@@ -29,6 +32,7 @@ function App() {
       }
       return acc;
     }, {});
+    setFiltersCnt(cnt);
     setSearch(searchObj);
   }
 
@@ -68,6 +72,7 @@ function App() {
     <div className="App">
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
+      {stocks && stocks.length > 0 && <h5>Filters added: {filtersCnt}</h5>}
       {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
       <PercentageDiff />
     </div>
