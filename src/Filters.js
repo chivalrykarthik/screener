@@ -32,7 +32,14 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
                 </select>
             </div>
             <div style={{}}>
-                <input type="text" placeholder='Value' name='value' value={value} onChange={handleChange} />
+                <input
+                    type="text"
+                    placeholder='Value'
+                    name='value'
+                    value={value}
+                    onChange={handleChange}
+                    autoComplete='off'
+                />
             </div>
         </div>
     )
