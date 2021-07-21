@@ -65,7 +65,7 @@ const AddDiff = () => {
         <div>
             <h5>Calculate Diff:</h5>
             <button onClick={addCmp}>Add</button>
-            <div style={{ display: "flex", justifyContent: "space-between", width: '90%', flexWrap: "wrap" }}>
+            <div style={{ display: "flex", width: '90%', flexWrap: "wrap" }}>
                 {cmps.map(cmp => {
                     const { CmpName, label } = cmp;
                     return <CmpName label={label} />
