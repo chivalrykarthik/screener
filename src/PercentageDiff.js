@@ -43,7 +43,7 @@ const PercentageDiff = ({ label }) => {
 
     return (
         <>
-            <div>
+            <div style={{ margin: "0 20px 0 0" }}>
                 <h6>{label}</h6>
                 <input type="text" onChange={e => setVal(e.target.value)} />
                 <button onClick={onCalc} >Calc</button>
