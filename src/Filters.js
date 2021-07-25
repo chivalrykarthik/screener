@@ -1,3 +1,4 @@
+import { Button } from './Styles/Txt';
 
 const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
     const handleChange = (e) => {
@@ -55,7 +56,7 @@ const Filters = ({ filtersList, updFilter, addToSearch }) => {
                 }
                 <br />
             </div>
-            <button onClick={addToSearch.bind(null, filtersList)} >Filter</button>
+            <Button onClick={addToSearch.bind(null, filtersList)} >Filter</Button>
         </>
     )
 }
