@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import operators from './operators';
 const Heading = ({ stock }) => {
     const { filters } = stock;
@@ -18,7 +17,7 @@ const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
     let cnt = 0;
-    const processResult = (colName, key) => {
+    const processResult = (colName) => {
         const params = searchParams[colName];
 
         if (params && operators[params.operator]) {

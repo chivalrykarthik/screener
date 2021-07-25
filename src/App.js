@@ -6,12 +6,14 @@ import { useState } from 'react';
 import Tbl from './Tbl';
 import PercentageDiff from './PercentageDiff';
 import { Container } from './Styles/Container'
+import StockAvg from './StockAvg';
 function App() {
   const [txt, setTxt] = useState('');
   const [stocks, setStocks] = useState([]);
   const [filtersList, setFilters] = useState([]);
   const [searchParams, setSearch] = useState({});
   const [filtersCnt, setFiltersCnt] = useState(0);
+  const [average, setAverage] = useState(0);
   const updFilter = (key, col, value) => {
     const tmp = [...filtersList];
     tmp[key][col] = value;
@@ -53,13 +55,25 @@ function App() {
       setFilters([]);
     }
   }
-
+  const getAvg = (stocks) => {
+    if (Array.isArray(stocks) && stocks?.length) {
+      const avg = { len: stocks.length, cols: {} };
+      stocks.forEach(stock => {
+        const { filters } = stock;
+        Object.keys(filters).forEach(filter => {
+          avg.cols[filter] = parseFloat(avg.cols[filter] || 0) + parseFloat(filters[filter] || 0);
+        });
+      });
+      setAverage(avg);
+    }
+  }
   const parseStocks = () => {
     try {
       let tmpStocks = JSON.parse(txt);
       if (!Array.isArray(tmpStocks)) { tmpStocks = [tmpStocks] }
       setStocks(tmpStocks);
       createFilters(tmpStocks);
+      getAvg(tmpStocks);
     } catch (e) {
       alert("Invlaid JSON")
     }
@@ -75,6 +89,7 @@ function App() {
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
       {stocks && stocks.length > 0 && <h5>Filters added: {filtersCnt}</h5>}
+      {stocks && stocks.length > 0 && <StockAvg average={average} />}
       {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
       <PercentageDiff />
     </Container>
