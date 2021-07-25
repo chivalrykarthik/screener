@@ -1,6 +1,21 @@
+import { useState } from 'react';
 import { Button } from './Styles/Txt';
 
-const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
+const CompareDropDown = ({ filtersList, handleChange }) => {
+    return (
+        <>
+            <select name='value' onChange={handleChange}>
+                <option value=''>Select</option>
+                {
+                    filtersList.map(filter => <option value={filter.label}>{filter.label}</option>)
+                }
+
+            </select>
+        </>
+    )
+}
+const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList }) => {
+    const [isCompare, setCompare] = useState(false);
     const handleChange = (e) => {
         let value = e.target.value;
         const name = e.target.name;
@@ -8,6 +23,14 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
         if (name === "checked") {
             value = !checked;
         }
+        if (name === 'operator') {
+            if (value === 'GT' || value === 'LT') {
+                setCompare(true);
+            } else {
+                setCompare(false);
+            }
+        }
+
         updFilter(rowNum, name, value);
         if ((name === 'operator' || name === 'value') && value) {
             updFilter(rowNum, 'checked', true);
@@ -30,17 +53,19 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter }) => {
                     <option value='<='>Less & equal</option>
                     <option value='!='>Not equal</option>
                     <option value='=='>Equal</option>
+                    <option value='GT'>Greater than</option>
+                    <option value='LT'>Less than</option>
                 </select>
             </div>
             <div>
-                <input
+                {!isCompare ? <input
                     type="text"
                     placeholder='Value'
                     name='value'
                     value={value}
                     onChange={handleChange}
                     autoComplete='off'
-                />
+                /> : <CompareDropDown filtersList={filtersList} handleChange={handleChange} />}
             </div>
         </div>
     )
@@ -52,7 +77,7 @@ const Filters = ({ filtersList, updFilter, addToSearch }) => {
             <div className='filters'>
 
                 {
-                    filtersList.map((filter, key) => <Rows label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} />)
+                    filtersList.map((filter, key) => <Rows label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} filtersList={filtersList} />)
                 }
                 <br />
             </div>

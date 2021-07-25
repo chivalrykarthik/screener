@@ -22,7 +22,8 @@ const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
         const params = searchParams[colName];
 
         if (params && operators[params.operator]) {
-            const className = operators[params.operator](filters[colName], params.value) ? 'greenCol' : 'redCol';
+            const value = (params.operator === 'LT' || params.operator === 'GT') ? (filters[params.value] || 0) : params.value;
+            const className = operators[params.operator](filters[colName], value) ? 'greenCol' : 'redCol';
             if (className === 'greenCol') {
                 cnt++;
             }
