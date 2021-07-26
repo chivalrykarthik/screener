@@ -14,7 +14,7 @@ const CompareDropDown = ({ filtersList, handleChange }) => {
         </>
     )
 }
-const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList }) => {
+const Rows = ({ rowNum, label, value, checked, updFilter, filtersList, average }) => {
     const [isCompare, setCompare] = useState(false);
     const handleChange = (e) => {
         let value = e.target.value;
@@ -29,6 +29,11 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList 
             } else {
                 setCompare(false);
             }
+            if (value === 'GTA' || value === 'LTA') {
+                updFilter(rowNum, 'value', Math.round(average.cols[label] / average.len));
+            } else {
+                updFilter(rowNum, 'value', '');
+            }
         }
 
         updFilter(rowNum, name, value);
@@ -37,14 +42,14 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList 
         }
     }
     return (
-        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "50%", margin: "0 0 5px 0" }}>
+        <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "50%", margin: "10px" }}>
             <div>
                 <input type="checkbox" onChange={handleChange} name='checked' checked={checked} />
             </div>
-            <div style={{ width: "10em" }}>
+            <div style={{ width: '33%' }}>
                 <label>{label}</label>&nbsp;
             </div>
-            <div>
+            <div style={{ width: '33%' }}>
                 <select name='operator' onChange={handleChange}>
                     <option value=''>Select</option>
                     <option value='>'>Greater</option>
@@ -55,9 +60,11 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList 
                     <option value='=='>Equal</option>
                     <option value='GT'>Greater than</option>
                     <option value='LT'>Less than</option>
+                    <option value='GTA'>Greater than AVG</option>
+                    <option value='LTA'>Less than AVG</option>
                 </select>
             </div>
-            <div>
+            <div style={{ width: '33%' }}>
                 {!isCompare ? <input
                     type="text"
                     placeholder='Value'
@@ -70,14 +77,14 @@ const Rows = ({ rowNum, label, operator, value, checked, updFilter, filtersList 
         </div>
     )
 }
-const Filters = ({ filtersList, updFilter, addToSearch }) => {
+const Filters = ({ filtersList, updFilter, addToSearch, average }) => {
     return (
         <>
             <h5>Filters:</h5>
             <div className='filters'>
 
                 {
-                    filtersList.map((filter, key) => <Rows label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} filtersList={filtersList} />)
+                    filtersList.map((filter, key) => <Rows average={average} label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} filtersList={filtersList} />)
                 }
                 <br />
             </div>

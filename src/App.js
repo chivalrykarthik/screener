@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Txt from './Txt';
 import Filters from './Filters';
@@ -6,7 +5,7 @@ import { useState } from 'react';
 import Tbl from './Tbl';
 import PercentageDiff from './PercentageDiff';
 import { Container } from './Styles/Container'
-import StockAvg from './StockAvg';
+
 function App() {
   const [txt, setTxt] = useState('');
   const [stocks, setStocks] = useState([]);
@@ -87,10 +86,9 @@ function App() {
     <Container>
 
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
-      {stocks && stocks.length > 0 && <Filters filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
+      {stocks && stocks.length > 0 && <Filters average={average} filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
       {stocks && stocks.length > 0 && <h5>Filters added: {filtersCnt}</h5>}
-      {stocks && stocks.length > 0 && <StockAvg average={average} />}
-      {stocks && stocks.length > 0 && <Tbl stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
+      {stocks && stocks.length > 0 && <Tbl average={average} stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
       <PercentageDiff />
     </Container>
   );

@@ -1,11 +1,14 @@
 import operators from './operators';
-const Heading = ({ stock }) => {
+import { Avg } from './Styles/Table';
+const Heading = ({ stock, average }) => {
+    console.log("Avg=" + JSON.stringify(average))
+    console.log("stock=" + JSON.stringify(stock))
     const { filters } = stock;
     const cols = Object.keys(filters);
     return (
         <>
             <th>StockName</th>
-            {cols.map(col => <th>{col}</th>)}
+            {cols.map(col => <th>{col}<Avg>{(Math.round(average.cols[col] / average.len))}</Avg></th>)}
             <th>Matches</th>
             <th>Action</th>
         </>
@@ -54,13 +57,13 @@ const Rows = (props) => {
     )
 }
 
-const Tbl = ({ stocks, searchParams, deleteStock }) => {
+const Tbl = ({ stocks, searchParams, deleteStock, average }) => {
     return (
         <>
             <table border="1">
                 <thead>
                     <tr>
-                        <Heading stock={stocks[0]} />
+                        <Heading average={average} stock={stocks[0]} />
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +71,7 @@ const Tbl = ({ stocks, searchParams, deleteStock }) => {
                 </tbody>
                 <thead>
                     <tr bold="1">
-                        <Heading stock={stocks[0]} />
+                        <Heading average={average} stock={stocks[0]} />
                     </tr>
                 </thead>
             </table>
