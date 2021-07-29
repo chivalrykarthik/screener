@@ -88,7 +88,7 @@ function App() {
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters average={average} filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
       {stocks && stocks.length > 0 && <h5>Filters added: {filtersCnt}</h5>}
-      {stocks && stocks.length > 0 && <Tbl average={average} stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} />}
+      {stocks && stocks.length > 0 && <Tbl average={average} stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} filtersCnt={filtersCnt} />}
       <PercentageDiff />
     </Container>
   );

@@ -15,10 +15,27 @@ const Heading = ({ stock, average }) => {
     )
 }
 
-const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
+const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt }) => {
 
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
+    const calcPercent = (matchCnt) => {
+        if (filtersCnt <= 0) return;
+        const percentage = ((matchCnt / filtersCnt) * 100);
+        if (percentage >= 90) {
+            return { background: 'green', color: 'rgb(255,255,255)' };
+        } else if (percentage >= 80) {
+            return { background: 'lightgreen', color: 'rgb(255,255,255)' };
+        } else if (percentage >= 70) {
+            return { background: 'skyblue', color: 'rgb(255,255,255)' };
+        } else if (percentage >= 60) {
+            return { background: 'orange', color: 'rgb(255,255,255)' };
+        } else if (percentage >= 50) {
+            return { background: 'yellow', color: 'rgb(255,255,255)' };
+        } else {
+            return { background: 'red', color: 'rgb(255,255,255)' };
+        }
+    }
     let cnt = 0;
     const processResult = (colName) => {
         const params = searchParams[colName];
@@ -42,7 +59,7 @@ const Col = ({ stock, searchParams, deleteStock, rowNum }) => {
                     return <td className={className} >{filters[col]}</td>;
                 })
             }
-            <td>{cnt}</td>
+            <td style={calcPercent(cnt)}>{cnt}</td>
             <td><button onClick={deleteStock.bind(null, rowNum)}>Delete</button></td>
         </>
     )
@@ -57,7 +74,7 @@ const Rows = (props) => {
     )
 }
 
-const Tbl = ({ stocks, searchParams, deleteStock, average }) => {
+const Tbl = ({ stocks, searchParams, deleteStock, average, filtersCnt }) => {
     return (
         <>
             <table border="1">
@@ -67,7 +84,7 @@ const Tbl = ({ stocks, searchParams, deleteStock, average }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((stock, rowNum) => <Rows stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
+                    {stocks.map((stock, rowNum) => <Rows filtersCnt={filtersCnt} stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
                 </tbody>
                 <thead>
                     <tr bold="1">
