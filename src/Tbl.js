@@ -1,21 +1,19 @@
 import operators from './operators';
 import { Avg } from './Styles/Table';
 const Heading = ({ stock, average }) => {
-    console.log("Avg=" + JSON.stringify(average))
-    console.log("stock=" + JSON.stringify(stock))
     const { filters } = stock;
     const cols = Object.keys(filters);
     return (
         <>
             <th>StockName</th>
-            {cols.map(col => <th>{col}<Avg>{(Math.round(average.cols[col] / average.len))}</Avg></th>)}
+            {cols.map(col => <th>{col}<Avg>{(Math.round(average[col].val / average[col].len))}</Avg></th>)}
             <th>Matches</th>
             <th>Action</th>
         </>
     )
 }
 
-const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt }) => {
+const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt, updAvg }) => {
 
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
@@ -50,13 +48,26 @@ const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt }) => {
         }
         return;
     }
+    const handleChange = (e) => {
+        const { checked, value, name } = e.target;
+        if (checked) {
+            console.log(`sub=====name:${name}=====value:${value}`);
+            updAvg('sub', name, value);
+        } else {
+            console.log(`add=====name:${name}=====value:${value}`);
+            updAvg('add', name, value);
+        }
+    }
     return (
         <>
             <td>{Name}</td>
             {
                 cols.map((col, key) => {
                     const className = processResult(col, key) || '';
-                    return <td className={className} >{filters[col]}</td>;
+                    return (<td className={className} >
+                        <input type="checkbox" name={col} value={filters[col]} onChange={handleChange} />
+                        {filters[col]}
+                    </td>);
                 })
             }
             <td style={calcPercent(cnt)}>{cnt}</td>
@@ -74,7 +85,7 @@ const Rows = (props) => {
     )
 }
 
-const Tbl = ({ stocks, searchParams, deleteStock, average, filtersCnt }) => {
+const Tbl = ({ stocks, searchParams, deleteStock, average, filtersCnt, updAvg }) => {
     return (
         <>
             <table border="1">
@@ -84,7 +95,7 @@ const Tbl = ({ stocks, searchParams, deleteStock, average, filtersCnt }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((stock, rowNum) => <Rows filtersCnt={filtersCnt} stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
+                    {stocks.map((stock, rowNum) => <Rows updAvg={updAvg} filtersCnt={filtersCnt} stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
                 </tbody>
                 <thead>
                     <tr bold="1">

@@ -30,7 +30,7 @@ const Rows = ({ rowNum, label, value, checked, updFilter, filtersList, average }
                 setCompare(false);
             }
             if (value === 'GTA' || value === 'LTA') {
-                updFilter(rowNum, 'value', Math.round(average.cols[label] / average.len));
+                updFilter(rowNum, 'value', Math.round(average.[label].val / average[label].len));
             } else {
                 updFilter(rowNum, 'value', '');
             }

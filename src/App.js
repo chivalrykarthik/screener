@@ -56,15 +56,23 @@ function App() {
   }
   const getAvg = (stocks) => {
     if (Array.isArray(stocks) && stocks?.length) {
-      const avg = { len: stocks.length, cols: {} };
+      let avg = {};
       stocks.forEach(stock => {
         const { filters } = stock;
         Object.keys(filters).forEach(filter => {
-          avg.cols[filter] = parseFloat(avg.cols[filter] || 0) + parseFloat(filters[filter] || 0);
+          avg[filter] = { val: parseFloat(avg[filter]?.val || 0) + parseFloat(filters[filter] || 0), len: stocks.length };
         });
+
       });
       setAverage(avg);
     }
+  }
+
+  const updAvg = (type, filter, num) => {
+    let tmp = JSON.parse(JSON.stringify(average));
+    tmp[filter].val = type === 'sub' ? (tmp[filter].val - (num)) : (parseFloat(tmp[filter].val) + parseFloat(num));
+    tmp[filter].len = type === 'sub' ? (tmp[filter].len - 1) : (parseFloat(tmp[filter].len) + 1);
+    setAverage(tmp);
   }
   const parseStocks = () => {
     try {
@@ -88,7 +96,7 @@ function App() {
       <Txt value={txt} setVal={setTxt} onSubmit={parseStocks} />
       {stocks && stocks.length > 0 && <Filters average={average} filtersList={filtersList} updFilter={updFilter} addToSearch={addToSearch} />}
       {stocks && stocks.length > 0 && <h5>Filters added: {filtersCnt}</h5>}
-      {stocks && stocks.length > 0 && <Tbl average={average} stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} filtersCnt={filtersCnt} />}
+      {stocks && stocks.length > 0 && <Tbl updAvg={updAvg} average={average} stocks={stocks} searchParams={searchParams} deleteStock={deleteStock} filtersCnt={filtersCnt} />}
       <PercentageDiff />
     </Container>
   );
