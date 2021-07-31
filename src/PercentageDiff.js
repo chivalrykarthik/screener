@@ -37,7 +37,7 @@ const PercentageDiff = ({ label }) => {
             tmp.diff = findPerDiff(val, values[key - 1]);
             return [...acc, tmp];
         }, []);
-        console.log(per)
+
         setPrecentages(per);
     }
 

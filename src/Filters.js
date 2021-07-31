@@ -9,7 +9,6 @@ const CompareDropDown = ({ filtersList, handleChange }) => {
                 {
                     filtersList.map(filter => <option value={filter.label}>{filter.label}</option>)
                 }
-
             </select>
         </>
     )

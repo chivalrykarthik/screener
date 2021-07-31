@@ -69,8 +69,9 @@ function App() {
   }
 
   const updAvg = (type, filter, num) => {
+    const parseNum = parseFloat(num) || 0;
     let tmp = JSON.parse(JSON.stringify(average));
-    tmp[filter].val = type === 'sub' ? (tmp[filter].val - (num)) : (parseFloat(tmp[filter].val) + parseFloat(num));
+    tmp[filter].val = type === 'sub' ? (tmp[filter].val - (parseNum)) : (parseFloat(tmp[filter].val) + parseNum);
     tmp[filter].len = type === 'sub' ? (tmp[filter].len - 1) : (parseFloat(tmp[filter].len) + 1);
     setAverage(tmp);
   }

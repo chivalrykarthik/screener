@@ -51,10 +51,8 @@ const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt, updAvg }) =
     const handleChange = (e) => {
         const { checked, value, name } = e.target;
         if (checked) {
-            console.log(`sub=====name:${name}=====value:${value}`);
             updAvg('sub', name, value);
         } else {
-            console.log(`add=====name:${name}=====value:${value}`);
             updAvg('add', name, value);
         }
     }
