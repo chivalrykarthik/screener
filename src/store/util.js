@@ -31,7 +31,10 @@ export const getAvg = (stocks) => {
         stocks.forEach(stock => {
             const { filters } = stock;
             Object.keys(filters).forEach(filter => {
-                avg[filter] = { val: parseFloat(avg[filter]?.val || 0) + parseFloat(filters[filter] || 0), len: stocks.length };
+                const val = parseFloat(avg[filter]?.val || 0) + parseFloat(filters[filter] || 0);
+                //const len = stocks.length
+                const len = filters[filter] != '' ? (avg[filter]?.len || 0) + 1 : avg[filter]?.len;
+                avg[filter] = { val, len };
             });
         });
         return avg;

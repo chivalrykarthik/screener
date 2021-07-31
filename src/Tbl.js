@@ -3,6 +3,7 @@ import action from './store/action';
 import operators from './operators';
 import { Avg } from './Styles/Table';
 import { COLOR } from './constants'
+import { useState } from 'react';
 const Heading = ({ stock, average }) => {
     const { filters } = stock;
     const cols = Object.keys(filters);
@@ -16,6 +17,19 @@ const Heading = ({ stock, average }) => {
     )
 }
 
+const CheckCmp = ({ name, value, onChange }) => {
+    const isChecked = value === '' ? true : false
+    const [checked, setChecked] = useState(isChecked);
+    const handleChange = (e) => {
+        setChecked(!checked);
+        onChange(e);
+    }
+    return (
+        <>
+            <input type="checkbox" name={name} value={value} onChange={handleChange} checked={checked} />
+        </>
+    )
+}
 const Col = ({ stock, rowNum }) => {
     const [store, dispatch] = useStore();
     const { Name, filters } = stock;
@@ -67,7 +81,8 @@ const Col = ({ stock, rowNum }) => {
                 cols.map((col, key) => {
                     const className = processResult(col, key) || '';
                     return (<td className={className} >
-                        <input type="checkbox" name={col} value={filters[col]} onChange={handleChange} />
+
+                        <CheckCmp name={col} value={filters[col]} onChange={handleChange} />
                         {filters[col]}
                     </td>);
                 })
