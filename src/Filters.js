@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { Button } from './Styles/Txt';
+import { useStore } from './store'
+import action from './store/action';
 
-const CompareDropDown = ({ filtersList, handleChange }) => {
+const CompareDropDown = ({ handleChange }) => {
+    const [store] = useStore();
     return (
         <>
             <select name='value' onChange={handleChange}>
                 <option value=''>Select</option>
                 {
-                    filtersList.map(filter => <option value={filter.label}>{filter.label}</option>)
+                    store.filtersList.map(filter => <option value={filter.label}>{filter.label}</option>)
                 }
             </select>
         </>
     )
 }
-const Rows = ({ rowNum, label, value, checked, updFilter, filtersList, average }) => {
+const Rows = ({ rowNum, label, value, checked }) => {
+    const [store, dispatch] = useStore();
     const [isCompare, setCompare] = useState(false);
     const handleChange = (e) => {
         let value = e.target.value;
@@ -29,15 +33,14 @@ const Rows = ({ rowNum, label, value, checked, updFilter, filtersList, average }
                 setCompare(false);
             }
             if (value === 'GTA' || value === 'LTA') {
-                updFilter(rowNum, 'value', Math.round(average.[label].val / average[label].len));
+                dispatch({ type: action.UPD_FILTERS, data: { key: rowNum, col: 'value', value: Math.round(store.average[label].val / store.average[label].len) } })
             } else {
-                updFilter(rowNum, 'value', '');
+                dispatch({ type: action.UPD_FILTERS, data: { key: rowNum, col: 'value', value: '' } })
             }
         }
-
-        updFilter(rowNum, name, value);
+        dispatch({ type: action.UPD_FILTERS, data: { key: rowNum, col: name, value: value } })
         if ((name === 'operator' || name === 'value') && value) {
-            updFilter(rowNum, 'checked', true);
+            dispatch({ type: action.UPD_FILTERS, data: { key: rowNum, col: 'checked', value: true } })
         }
     }
     return (
@@ -71,23 +74,28 @@ const Rows = ({ rowNum, label, value, checked, updFilter, filtersList, average }
                     value={value}
                     onChange={handleChange}
                     autoComplete='off'
-                /> : <CompareDropDown filtersList={filtersList} handleChange={handleChange} />}
+                /> : <CompareDropDown handleChange={handleChange} />}
             </div>
         </div>
     )
 }
-const Filters = ({ filtersList, updFilter, addToSearch, average }) => {
+const Filters = () => {
+    const [store, dispatch] = useStore();
+    const addToSearch = () => {
+        dispatch({ type: action.ADD_SEARCH });
+    }
     return (
         <>
             <h5>Filters:</h5>
             <div className='filters'>
 
                 {
-                    filtersList.map((filter, key) => <Rows average={average} label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key} updFilter={updFilter} filtersList={filtersList} />)
+                    store.filtersList.map((filter, key) => <Rows label={filter.label} operator={filter.operator} value={filter.value} checked={filter.checked} key={key} rowNum={key}
+                    />)
                 }
                 <br />
             </div>
-            <Button onClick={addToSearch.bind(null, filtersList)} >Filter</Button>
+            <Button onClick={addToSearch} >Filter</Button>
         </>
     )
 }

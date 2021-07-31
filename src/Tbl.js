@@ -1,5 +1,8 @@
+import { useStore } from './store';
+import action from './store/action';
 import operators from './operators';
 import { Avg } from './Styles/Table';
+import { COLOR } from './constants'
 const Heading = ({ stock, average }) => {
     const { filters } = stock;
     const cols = Object.keys(filters);
@@ -13,30 +16,31 @@ const Heading = ({ stock, average }) => {
     )
 }
 
-const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt, updAvg }) => {
-
+const Col = ({ stock, rowNum }) => {
+    const [store, dispatch] = useStore();
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
+    const { filtersCnt } = store;
     const calcPercent = (matchCnt) => {
         if (filtersCnt <= 0) return;
         const percentage = ((matchCnt / filtersCnt) * 100);
         if (percentage >= 90) {
-            return { background: 'green', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.ABOVE_NINTY;
         } else if (percentage >= 80) {
-            return { background: 'lightgreen', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.ABOVE_EIGHTY;
         } else if (percentage >= 70) {
-            return { background: 'skyblue', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.ABOVE_SEVENTY;
         } else if (percentage >= 60) {
-            return { background: 'orange', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.ABOVE_SIXTY;
         } else if (percentage >= 50) {
-            return { background: 'yellow', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.ABOVE_FIFTY;
         } else {
-            return { background: 'red', color: 'rgb(255,255,255)' };
+            return COLOR.RESULT.BELOW_FIFTY;
         }
     }
     let cnt = 0;
     const processResult = (colName) => {
-        const params = searchParams[colName];
+        const params = store.searchParams[colName];
 
         if (params && operators[params.operator]) {
             const value = (params.operator === 'LT' || params.operator === 'GT') ? (filters[params.value] || 0) : params.value;
@@ -48,13 +52,13 @@ const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt, updAvg }) =
         }
         return;
     }
-    const handleChange = (e) => {
+    const handleChange = function (e) {
         const { checked, value, name } = e.target;
-        if (checked) {
-            updAvg('sub', name, value);
-        } else {
-            updAvg('add', name, value);
-        }
+        const updType = checked ? 'sub' : 'add';
+        dispatch({ type: action.UPD_AVG, data: { updType, filter: name, num: value } });
+    }
+    const handleDelete = (rowNum) => {
+        dispatch({ type: action.DELETE_STOCK, data: { key: rowNum } });
     }
     return (
         <>
@@ -69,7 +73,7 @@ const Col = ({ stock, searchParams, deleteStock, rowNum, filtersCnt, updAvg }) =
                 })
             }
             <td style={calcPercent(cnt)}>{cnt}</td>
-            <td><button onClick={deleteStock.bind(null, rowNum)}>Delete</button></td>
+            <td><button onClick={handleDelete.bind(null, rowNum)}>Delete</button></td>
         </>
     )
 }
@@ -83,21 +87,22 @@ const Rows = (props) => {
     )
 }
 
-const Tbl = ({ stocks, searchParams, deleteStock, average, filtersCnt, updAvg }) => {
+const Tbl = () => {
+    const [store] = useStore();
     return (
         <>
             <table border="1">
                 <thead>
                     <tr>
-                        <Heading average={average} stock={stocks[0]} />
+                        <Heading average={store.average} stock={store.stocks[0]} />
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((stock, rowNum) => <Rows updAvg={updAvg} filtersCnt={filtersCnt} stock={stock} searchParams={searchParams} rowNum={rowNum} deleteStock={deleteStock} />)}
+                    {store.stocks.map((stock, rowNum) => <Rows stock={stock} rowNum={rowNum} />)}
                 </tbody>
                 <thead>
                     <tr bold="1">
-                        <Heading average={average} stock={stocks[0]} />
+                        <Heading average={store.average} stock={store.stocks[0]} />
                     </tr>
                 </thead>
             </table>
