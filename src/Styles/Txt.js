@@ -16,8 +16,20 @@ const Header = styled.div`
     flex-direction:column;
 `;
 
+const Avg = styled.div`
+margin: 5px 0 0 0;
+input{
+    margin:0 5px 0 5px;
+}
+label{
+    font-weight:bold;
+    font-size:0.9rem;
+}
+
+`;
 export {
     TextArea,
     Button,
-    Header
+    Header,
+    Avg
 }

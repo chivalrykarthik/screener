@@ -6,7 +6,9 @@ const action = {
     ADD_SEARCH: 'ADD_SEARCH',
     UPD_FILTERS: 'UPD_FILTERS',
     UPD_AVG: 'UPD_AVG',
-    DELETE_STOCK: 'DELETE_STOCK'
+    DELETE_STOCK: 'DELETE_STOCK',
+    UPD_HIGH_AVG: 'UPD_HIGH_AVG',
+    UPD_LOW_AVG: 'UPD_LOW_AVG'
 }
 
 export default action;

@@ -4,6 +4,7 @@ import operators from './operators';
 import { Avg } from './Styles/Table';
 import { COLOR } from './constants'
 import { useState } from 'react';
+import { useEffect } from 'react';
 const Heading = ({ stock, average }) => {
     const { filters } = stock;
     const cols = Object.keys(filters);
@@ -18,8 +19,15 @@ const Heading = ({ stock, average }) => {
 }
 
 const CheckCmp = ({ name, value, onChange }) => {
-    const isChecked = value === '' ? true : false
+    const [store] = useStore();
+    const { rm } = store.average[name];
+    const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false
     const [checked, setChecked] = useState(isChecked);
+    useEffect(() => {
+        const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false;
+        setChecked(isChecked);
+    }, [...rm]);
+
     const handleChange = (e) => {
         setChecked(!checked);
         onChange(e);

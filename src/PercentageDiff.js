@@ -1,7 +1,5 @@
 import { useState } from "react";
-const findPerDiff = (newNum, orgNum) => {
-    return ((newNum - orgNum) / orgNum) * 100;
-}
+import { findPerDiff } from './store/util';
 
 const DiffList = ({ precentages }) => {
     return (
