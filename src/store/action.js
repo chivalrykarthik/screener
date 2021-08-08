@@ -9,7 +9,8 @@ const action = {
     DELETE_STOCK: 'DELETE_STOCK',
     UPD_HIGH_AVG: 'UPD_HIGH_AVG',
     UPD_LOW_AVG: 'UPD_LOW_AVG',
-    UPD_MAX_PER: 'UPD_MAX_PER'
+    UPD_MAX_PER: 'UPD_MAX_PER',
+    UPD_STOCKS: 'UPD_STOCKS'
 }
 
 export default action;

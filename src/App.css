@@ -75,6 +75,7 @@ table thead th {
   z-index: 1;
   width: 25vw;
   background: white;
+  cursor: pointer;
 }
 table td {
   background: #fff;

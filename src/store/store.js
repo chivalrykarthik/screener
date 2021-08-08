@@ -57,6 +57,8 @@ export const reducer = (state, action) => {
             return { ...state, lowAvg: data.value };
         case "UPD_MAX_PER":
             return { ...state, maxPer: data.value };
+        case "UPD_STOCKS":
+            return { ...state, stocks: data.stocks };
         default:
             return state;
     }

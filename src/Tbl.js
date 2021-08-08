@@ -5,13 +5,27 @@ import { Avg } from './Styles/Table';
 import { COLOR } from './constants'
 import { useState } from 'react';
 import { useEffect } from 'react';
-const Heading = ({ stock, average }) => {
-    const { filters } = stock;
+const Heading = ({ stocks, average }) => {
+    const [, dispatch] = useStore();
+    const [isAscending, setAscending] = useState(false);
+    const { filters } = stocks[0];
     const cols = Object.keys(filters);
+    const sortTable = (col) => {
+        let tmpStocks = JSON.parse(JSON.stringify(stocks));
+        tmpStocks.sort((a, b) => {
+            if (!isAscending) {
+                return a.filters[col] - b.filters[col]
+            } else {
+                return b.filters[col] - a.filters[col]
+            }
+        });
+        setAscending(!isAscending);
+        dispatch({ type: action.UPD_STOCKS, data: { stocks: tmpStocks } });
+    }
     return (
         <>
             <th>StockName</th>
-            {cols.map(col => <th>{col}<Avg>{(Math.round(average[col].val / average[col].len))}</Avg></th>)}
+            {cols.map(col => <th onClick={sortTable.bind(null, col)} >{col}<Avg>{(Math.round(average[col].val / average[col].len))}</Avg></th>)}
             <th>Matches</th>
             <th>Action</th>
         </>
@@ -118,7 +132,7 @@ const Tbl = () => {
             <table border="1">
                 <thead>
                     <tr>
-                        <Heading average={store.average} stock={store.stocks[0]} />
+                        <Heading average={store.average} stocks={store.stocks} />
                     </tr>
                 </thead>
                 <tbody>
@@ -126,7 +140,7 @@ const Tbl = () => {
                 </tbody>
                 <thead>
                     <tr bold="1">
-                        <Heading average={store.average} stock={store.stocks[0]} />
+                        <Heading average={store.average} stocks={store.stocks} />
                     </tr>
                 </thead>
             </table>
