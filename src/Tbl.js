@@ -81,6 +81,7 @@ const Col = ({ stock, rowNum }) => {
     }
     const handleDelete = (rowNum) => {
         dispatch({ type: action.DELETE_STOCK, data: { key: rowNum } });
+        dispatch({ type: action.ADD_AVG });
     }
     return (
         <>

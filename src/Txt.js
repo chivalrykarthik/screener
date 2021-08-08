@@ -35,7 +35,7 @@ const Txt = () => {
                 <Avg>
                     <label>HighAvg</label><input type='text' name='highAvg' value={store.highAvg} onChange={handleAvg} />
                     <label>LowAvg</label><input type='text' name='lowAvg' value={store.lowAvg} onChange={handleAvg} />
-                    <label>LowAvg</label><input type='text' name='maxPer' value={store.maxPer} onChange={handleAvg} />
+                    <label>Diff</label><input type='text' name='maxPer' value={store.maxPer} onChange={handleAvg} />
                 </Avg>
                 <Button onClick={handleSubmit} >Add</Button>
             </Header>
