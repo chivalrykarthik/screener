@@ -5,6 +5,7 @@ import { Avg } from './Styles/Table';
 import { COLOR } from './constants'
 import { useState } from 'react';
 import { useEffect } from 'react';
+import './Tbl.css';
 const Heading = ({ stocks, average }) => {
     const [, dispatch] = useStore();
     const [isAscending, setAscending] = useState(false);
@@ -57,6 +58,7 @@ const Col = ({ stock, rowNum }) => {
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
     const { filtersCnt } = store;
+    const [isHighlight, setHighlight] = useState(false);
     const calcPercent = (matchCnt) => {
         if (filtersCnt <= 0) return;
         const percentage = ((matchCnt / filtersCnt) * 100);
@@ -97,20 +99,26 @@ const Col = ({ stock, rowNum }) => {
         dispatch({ type: action.DELETE_STOCK, data: { key: rowNum } });
         dispatch({ type: action.ADD_AVG });
     }
+    const checkHighlight = () => {
+        setHighlight(!isHighlight);
+    }
     return (
         <>
-            <td>{Name}</td>
+            <td className={isHighlight ? 'highlight' : ''}>
+                <input type="checkbox" onChange={checkHighlight} />
+                {Name}
+            </td>
             {
                 cols.map((col, key) => {
                     const className = processResult(col, key) || '';
-                    return (<td className={className} >
+                    return (<td className={`${className} ${isHighlight ? 'highlight' : ''}`} >
 
                         <CheckCmp name={col} value={filters[col]} onChange={handleChange} />
                         {filters[col]}
                     </td>);
                 })
             }
-            <td style={calcPercent(cnt)}>{cnt}</td>
+            <td className={isHighlight ? 'highlight' : ''} style={calcPercent(cnt)}>{cnt}</td>
             <td><button onClick={handleDelete.bind(null, rowNum)}>Delete</button></td>
         </>
     )
