@@ -51,7 +51,7 @@ const CheckCmp = ({ name, value, onChange, average }) => {
         </>
     )
 }
-const Col = ({ stock, rowNum, average, filtersCnt, searchParams, dispatch }) => {
+const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispatch }) => {
     const { Name, filters } = stock;
     const cols = Object.keys(filters);
     const [isHighlight, setHighlight] = useState(false);
@@ -96,7 +96,18 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, dispatch }) => 
         dispatch({ type: action.ADD_AVG });
     }
     const checkHighlight = () => {
+        let tmp = [...compare];
+        if (!isHighlight) {
+            tmp.push(rowNum);
+            console.log(rowNum)
+        } else {
+            const index = tmp.indexOf(rowNum);
+            if (index >= 0) {
+                tmp = [...tmp.slice(0, index), ...tmp.slice(index + 1)];
+            }
+        }
         setHighlight(!isHighlight);
+        dispatch({ type: action.ADD_TO_COMPARE, data: { compare: tmp } });
     }
     return (
         <>
@@ -130,7 +141,7 @@ const Rows = (props) => {
 }
 
 const Tbl = (
-    { average, stocks, filtersCnt, searchParams, dispatch }
+    { average, stocks, filtersCnt, searchParams, compare, dispatch }
 ) => {
 
     return (
@@ -142,7 +153,7 @@ const Tbl = (
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((stock, rowNum) => <Rows stock={stock} rowNum={rowNum} average={average} filtersCnt={filtersCnt} searchParams={searchParams} dispatch={dispatch} />)}
+                    {stocks.map((stock, rowNum) => <Rows stock={stock} compare={compare} rowNum={rowNum} average={average} filtersCnt={filtersCnt} searchParams={searchParams} dispatch={dispatch} />)}
                 </tbody>
                 <thead>
                     <tr bold="1">

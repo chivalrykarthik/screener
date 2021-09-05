@@ -16,7 +16,8 @@ export const initialState = {
     filtersList: [],
     average: {},
     searchParams: {},
-    filtersCnt: 0
+    filtersCnt: 0,
+    compare: []
 };
 
 
@@ -59,6 +60,8 @@ export const reducer = (state, action) => {
             return { ...state, maxPer: data.value };
         case "UPD_STOCKS":
             return { ...state, stocks: data.stocks };
+        case "ADD_TO_COMPARE":
+            return { ...state, compare: data.compare };
         default:
             return state;
     }

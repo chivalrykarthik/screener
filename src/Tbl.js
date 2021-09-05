@@ -11,6 +11,7 @@ const Tbl = () => {
                 dispatch={dispatch}
                 filtersCnt={store.filtersCnt}
                 searchParams={store.searchParams}
+                compare={store.compare}
             />
         </>
     )
