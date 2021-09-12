@@ -97,27 +97,7 @@ export const deleteStock = (key, stocks) => {
 export const findPerDiff = (newNum, orgNum) => {
     return ((newNum - orgNum) / orgNum) * 100;
 }
-/*export const removeOddVal = (value, highAvg, lowAvg, rm = [], mid = 0) => {
-    if (value.length) {
-        const midPostion = Math.round(value.length / 2);
-        const midEle = mid || value[midPostion];
-        const firstEle = value[0];
-        const lastEle = value[value.length - 1];
-        const lastDiff = findPerDiff(lastEle, midEle);
-        const firstDiff = findPerDiff(firstEle, midEle);
-        if (lastDiff > highAvg) {
-            const newValue = value.pop();
-            rm.push(newValue);
-            return removeOddVal(value, highAvg, lowAvg, rm, midEle);
-        } else if (firstDiff < lowAvg) {
-            const newValue = value.shift();
-            rm.push(newValue);
-            return removeOddVal(value, highAvg, lowAvg, rm, midEle);
-        } else {
-            return rm;
-        }
-    }
-}*/
+
 const findPercentage = (values) => {
     return values.reduce((acc, val, key) => {
         let tmp = {
@@ -148,21 +128,3 @@ export const removeOddVal = (arr, maxPer = 10, highAvg = 100, lowAvg = 100) => {
     ]
     return rm;
 }
-
-/*
-const ar = [-493.44, -133.71, -73.03, -34.41, -11.89, -9.83, -8.48, -4.61,
-            -2.71, -1.33, 0.01, 0.1, 1.61, 1.88, 2.36, 2.38, 2.51, 2.58, 3.41, 5.94,
-            6.48, 7.58, 9.68, 10.03, 10.51, 12.99, 13.26, 13.67, 15.16, 19.12, 21.65,
-            25.86]
-Find length of array
-    - get per from store
-    - get first 10 per
-        - calc percentage interval
-        - if it exceeds to -100 then skip remaining
-        - add skip num to rm
-    - get last 10 per
-        - calc percentage interval
-        - if it exceeds to 100 then skip remaining
-        - add skip num to rm
-
-*/

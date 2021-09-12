@@ -12,15 +12,16 @@ const ModalContainer = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;    
+    overflow:hidden;
 `;
 
 const ModalBody = styled.div`
     position:relative;
     background:white;
-    width:auto;
-    height:auto;
+    max-width:100%;
+    max-height:100%;
     padding:5px;
-
+    overflow:auto;
 `;
 
 const ModalClose = styled.div`
@@ -32,9 +33,15 @@ const ModalClose = styled.div`
 
 const Content = styled.div`
     display:flex;
+    flex-wrap: wrap;
+    
     >
     div{
         margin:5px;
+        max-width:20%;        
+    }
+    table tr th{
+        position:relative;
     }
     
 `;
