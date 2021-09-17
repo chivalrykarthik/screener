@@ -43,9 +43,21 @@ const addMetrics = function (stocks) {
     });
     return stocks;
 };
+
+const filterStocks = (stocks) => {
+    const tmp = stocks.filter((stock) => {
+        /* if (stock.filters['MarkCap'] >= 10) {
+             return true;
+         }*/
+        return true;
+    });
+    return tmp;
+}
+
 const calc = (stocks) => {
-    let parseStocks = JSON.parse(JSON.stringify(stocks));
-    parseStocks = addMetrics(parseStocks);
+    let stockObj = JSON.parse(JSON.stringify(stocks));
+    const filteredStocks = filterStocks(stockObj);
+    const parseStocks = addMetrics(filteredStocks);
 
     //Current
     const roe = findBest(parseStocks, 'ROE');
@@ -137,7 +149,37 @@ const calc = (stocks) => {
     );
     const rocePercentBest = sortByBest(rocePercentMatch);
 
+    /* OPM */
+    const opmPercent = findBest(parseStocks, 'OPM'); // last 12 months
+    const opmAnnPercent = findBest(parseStocks, 'OPMAnn'); // last fin year
+    const opmPrevAnnPercent = findBest(parseStocks, 'OPMPrevAnn'); // prev fin year
+    const opmQtrPercent = findBest(parseStocks, 'OPMQtr'); // latest qtr
+    const opmPrevQtrPercent = findBest(parseStocks, 'OPMPrevQtr'); // prev qtr
+    const opmPrevYrQtrPercent = findBest(parseStocks, 'OPMPYQtr'); // prev yr qtr
+    const opmPercentMatch = findMaxMatch(
+        ...opmPercent,
+        ...opmAnnPercent,
+        ...opmPrevAnnPercent,
+        ...opmQtrPercent,
+        ...opmPrevQtrPercent,
+        ...opmPrevYrQtrPercent
+    );
+    const opmPercentBest = sortByBest(opmPercentMatch);
 
+    /* NPM */
+    const npmAnnPercent = findBest(parseStocks, 'NPMAnn'); // last fin year
+    const npmPrevAnnPercent = findBest(parseStocks, 'NPMPrevAnn'); // prev fin year
+    const npmQtrPercent = findBest(parseStocks, 'NPMQtr'); // latest qtr
+    const npmPrevQtrPercent = findBest(parseStocks, 'NPMPrevQtr'); // prev qtr
+    const npmPrevYrQtrPercent = findBest(parseStocks, 'NPMPYQtr'); // prev yr qtr
+    const npmPercentMatch = findMaxMatch(
+        ...npmAnnPercent,
+        ...npmPrevAnnPercent,
+        ...npmQtrPercent,
+        ...npmPrevQtrPercent,
+        ...npmPrevYrQtrPercent
+    );
+    const npmPercentBest = sortByBest(npmPercentMatch);
 
     const allMatch = findMaxMatch(
         ...roe,
@@ -161,7 +203,18 @@ const calc = (stocks) => {
         ...epsCmpLastYr,
         ...epsCmpLastYrQtr,
         ...roePercent,
-        ...rocePercent
+        ...rocePercent,
+        ...opmPercent,
+        ...opmAnnPercent,
+        ...opmPrevAnnPercent,
+        ...opmQtrPercent,
+        ...opmPrevQtrPercent,
+        ...opmPrevYrQtrPercent,
+        ...npmAnnPercent,
+        ...npmPrevAnnPercent,
+        ...npmQtrPercent,
+        ...npmPrevQtrPercent,
+        ...npmPrevYrQtrPercent
     );
     const finalBest = sortByBest(allMatch);
     return {
@@ -175,6 +228,8 @@ const calc = (stocks) => {
         epsCmpLastYrQtrBest,
         roePercentBest,
         rocePercentBest,
+        opmPercentBest,
+        npmPercentBest,
         finalBest
     };
 
@@ -222,7 +277,9 @@ const BestPick = () => {
         epsCmpLastYrBest,
         epsCmpLastYrQtrBest,
         roePercentBest,
-        rocePercentBest
+        rocePercentBest,
+        opmPercentBest,
+        npmPercentBest
     } = calc(store.stocks);
 
     return (
@@ -279,6 +336,15 @@ const BestPick = () => {
                                 <Tbl rows={rocePercentBest} />
                             </div>
 
+                            <div>
+                                <h5>OPM</h5>
+                                <Tbl rows={opmPercentBest} />
+                            </div>
+
+                            <div>
+                                <h5>NPM</h5>
+                                <Tbl rows={npmPercentBest} />
+                            </div>
                             <div>
                                 <h5>Consolidated</h5>
                                 <Tbl rows={finalBest} />
