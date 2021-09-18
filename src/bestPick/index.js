@@ -54,6 +54,15 @@ const filterStocks = (stocks) => {
     return tmp;
 }
 
+const grpBest = (stocks, cols) => {
+    const best = cols.map(col => {
+        return findBest(stocks, col);
+    });
+    const match = findMaxMatch(...best);
+    const sortByBest = sortByBest(match);
+    return [match, sortByBest];
+}
+
 const calc = (stocks) => {
     let stockObj = JSON.parse(JSON.stringify(stocks));
     const filteredStocks = filterStocks(stockObj);
@@ -65,21 +74,27 @@ const calc = (stocks) => {
     const eps = findBest(parseStocks, 'EPS12M');
     const saleGrowth = findBest(parseStocks, 'Salesgrowth');
     const qtrSalesVar = findBest(parseStocks, 'QtrSalesVar'); // yoySales growth
+    const npmCur = findBest(parseStocks, 'NPMAnn'); // yoySales growth
+    const opmCur = findBest(parseStocks, 'OPM'); // yoySales growth
+
 
     const currentMatch = findMaxMatch(
         ...roe,
         ...roce,
         ...eps,
         ...saleGrowth,
-        ...qtrSalesVar
+        ...qtrSalesVar,
+        ...npmCur,
+        ...opmCur
     );
     const currentBest = sortByBest(currentMatch);
-
+    //const [currentMatch, currentBest] = grpBest(parseStocks, ['ROE', 'ROCE', 'EPS12M', 'Salesgrowth', 'QtrSalesVar']);
     //History prev
     const roePrevAnn = findBest(parseStocks, 'ROEPrevAnn');
     const rocePrevYr = findBest(parseStocks, 'ROCEPrevYr');
     const epsPreAn = findBest(parseStocks, 'EPSPrevAnnRs');
     const epsAnn = findBest(parseStocks, 'EPSAnnRs'); // eps last year
+
     const historyMatch = findMaxMatch(
         ...roePrevAnn,
         ...rocePrevYr,
