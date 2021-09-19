@@ -37,6 +37,7 @@ const addMetrics = function (stocks) {
         stocks[key].filters.epsAnnGrowthPercent = getPercentage(stocks[key].filters, 'EPS12M', 'EPSAnnRs');
         stocks[key].filters.epsPrevAnnGrowthPercent = getPercentage(stocks[key].filters, 'EPSAnnRs', 'EPSPrevAnnRs');
         stocks[key].filters.epsPreYearQtrPercent = getPercentage(stocks[key].filters, 'EPSQtrRs', 'EPSPYQtrRs');
+        stocks[key].filters.epsPreQtrPercent = getPercentage(stocks[key].filters, 'EPSQtrRs', 'EPSPrevQtrRs');
         stocks[key].filters.roePercent = getPercentage(stocks[key].filters, 'ROE', 'ROEPrevAnn');
         stocks[key].filters.rocePercent = getPercentage(stocks[key].filters, 'ROCE', 'ROCEPrevYr');
 
@@ -71,7 +72,7 @@ const calc = (stocks) => {
     //Current
     const roe = findBest(parseStocks, 'ROE');
     const roce = findBest(parseStocks, 'ROCE');
-    const eps = findBest(parseStocks, 'EPS12M');
+    //const eps = findBest(parseStocks, 'EPS12M');
     const saleGrowth = findBest(parseStocks, 'Salesgrowth');
     const qtrSalesVar = findBest(parseStocks, 'QtrSalesVar'); // yoySales growth
     const npmCur = findBest(parseStocks, 'NPMAnn'); // yoySales growth
@@ -81,7 +82,6 @@ const calc = (stocks) => {
     const currentMatch = findMaxMatch(
         ...roe,
         ...roce,
-        ...eps,
         ...saleGrowth,
         ...qtrSalesVar,
         ...npmCur,
@@ -92,25 +92,29 @@ const calc = (stocks) => {
     //History prev
     const roePrevAnn = findBest(parseStocks, 'ROEPrevAnn');
     const rocePrevYr = findBest(parseStocks, 'ROCEPrevYr');
-    const epsPreAn = findBest(parseStocks, 'EPSPrevAnnRs');
-    const epsAnn = findBest(parseStocks, 'EPSAnnRs'); // eps last year
 
     const historyMatch = findMaxMatch(
         ...roePrevAnn,
-        ...rocePrevYr,
-        ...epsPreAn,
-        ...epsAnn
+        ...rocePrevYr
     );
     const histBest = sortByBest(historyMatch);
 
     //EPS
-    const epsQtr = findBest(parseStocks, 'EPSQtrRs'); // latest qtr
-    const epsPQtr = findBest(parseStocks, 'EPSPYQtrRs'); // preceding year qtr
-    const epsMatch = findMaxMatch(
-        ...epsQtr,
-        ...epsPQtr
-    );
-    const epsBest = sortByBest(epsMatch);
+    /*  const eps12M = findBest(parseStocks, 'EPS12M'); // last 12 months.
+      const epsAnnPercent = findBest(parseStocks, 'EPSAnnRs'); // last fin year.
+      const epsPrevAnnPercent = findBest(parseStocks, 'EPSPrevAnnRs'); // prev fin year.
+      const epsQtr = findBest(parseStocks, 'EPSQtrRs'); // latest qtr
+      const epsPrevQtrPercent = findBest(parseStocks, 'EPSPrevQtrRs'); // prev qtr
+      const epsPrevYrQtrPercent = findBest(parseStocks, 'EPSPYQtrRs'); // prev yr qtr
+      const epsMatch = findMaxMatch(
+          ...eps12M,
+          ...epsAnnPercent,
+          ...epsPrevAnnPercent,
+          ...epsQtr,
+          ...epsPrevQtrPercent,
+          ...epsPrevYrQtrPercent
+      );
+      const epsBest = sortByBest(epsMatch);*/
 
     //3Year avg
     const roe3 = findBest(parseStocks, 'ROE3Yr');
@@ -151,6 +155,12 @@ const calc = (stocks) => {
         ...epsCmpLastYrQtr
     );
     const epsCmpLastYrQtrBest = sortByBest(epsCmpLastYrQtrMatch);
+
+    const epsCmpPrevQtr = findBest(parseStocks, 'epsPreQtrPercent');  // comparing latest qtr vs prev qtr    
+    const epsCmpPrevQtrMatch = findMaxMatch(
+        ...epsCmpPrevQtr
+    );
+    const epsCmpPrevQtrBest = sortByBest(epsCmpPrevQtrMatch);
 
     const roePercent = findBest(parseStocks, 'roePercent');
     const roePercentMatch = findMaxMatch(
@@ -199,15 +209,10 @@ const calc = (stocks) => {
     const allMatch = findMaxMatch(
         ...roe,
         ...roce,
-        ...eps,
         ...saleGrowth,
         ...qtrSalesVar,
         ...roePrevAnn,
         ...rocePrevYr,
-        ...epsPreAn,
-        ...epsAnn,
-        ...epsQtr,
-        ...epsPQtr,
         ...roe3,
         ...roce3,
         ...sales3,
@@ -217,6 +222,7 @@ const calc = (stocks) => {
         ...epsCmp12Mnth,
         ...epsCmpLastYr,
         ...epsCmpLastYrQtr,
+        ...epsCmpPrevQtr,
         ...roePercent,
         ...rocePercent,
         ...opmPercent,
@@ -235,12 +241,12 @@ const calc = (stocks) => {
     return {
         currentBest,
         histBest,
-        epsBest,
         avg3Best,
         avg5Best,
         epsCmp12MnthBest,
         epsCmpLastYrBest,
         epsCmpLastYrQtrBest,
+        epsCmpPrevQtrBest,
         roePercentBest,
         rocePercentBest,
         opmPercentBest,
@@ -284,13 +290,13 @@ const BestPick = () => {
     const {
         currentBest,
         histBest,
-        epsBest,
         avg3Best,
         avg5Best,
         finalBest,
         epsCmp12MnthBest,
         epsCmpLastYrBest,
         epsCmpLastYrQtrBest,
+        epsCmpPrevQtrBest,
         roePercentBest,
         rocePercentBest,
         opmPercentBest,
@@ -321,10 +327,6 @@ const BestPick = () => {
                                 <h5>Avg 5 Years</h5>
                                 <Tbl rows={avg5Best} />
                             </div>
-                            <div>
-                                <h5>Eps</h5>
-                                <Tbl rows={epsBest} />
-                            </div>
 
 
                             <div>
@@ -334,6 +336,11 @@ const BestPick = () => {
                             <div>
                                 <h5>EPS last yr vs prev yr</h5>
                                 <Tbl rows={epsCmpLastYrBest} />
+                            </div>
+
+                            <div>
+                                <h5>Eps last qtr vs prev qtr</h5>
+                                <Tbl rows={epsCmpPrevQtrBest} />
                             </div>
 
                             <div>
