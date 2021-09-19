@@ -8,6 +8,7 @@ import { Container } from './Styles/Container'
 import { Provider, useStore } from './store';
 import Modal from './modal';
 import BestPick from './bestPick';
+import SortedStocks from './sort';
 function App() {
   const [store] = useStore();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -22,6 +23,7 @@ function App() {
       {store.stocks && store.stocks.length > 0 && <h5>Filters added: {store.filtersCnt}</h5>}
       {store.compare && store.compare.length > 1 && <button onClick={showModal} >Compare</button>}
       {store.stocks && store.stocks.length > 0 && <BestPick />}
+      {store.stocks && store.stocks.length > 0 && <SortedStocks />}
       {store.stocks && store.stocks.length > 0 && <Tbl />}
       {isModalOpen && <Modal showModal={showModal} />}
 

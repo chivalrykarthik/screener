@@ -8,3 +8,4 @@ export const COLOR = {
         BELOW_FIFTY: { background: 'red', color: 'rgb(255,255,255)' }
     }
 }
+
