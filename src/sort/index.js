@@ -28,10 +28,13 @@ const sortStocks = (stocks) => {
 
             || round5(b.filters.ROE) - round5(a.filters.ROE) || round5(b.filters.ROCE) - round5(a.filters.ROCE) || round5(b.filters.ROEPrevAnn) - round5(a.filters.ROEPrevAnn) || round5(b.filters.ROCEPrevYr) - round5(a.filters.ROCEPrevYr)
 
+            || round5(b.filters.FreeCashFlowRsCr) - round5(a.filters.FreeCashFlowRsCr)
+
+            || round5(b.filters.FCFPrevAnnRsCr) - round5(a.filters.FCFPrevAnnRsCr)
 
             || round5(a.filters['Debt to Eq']) - round5(b.filters['Debt to Eq'])
 
-
+            || round5(a.filters['PERatio']) - round5(b.filters['PERatio'])
 
     })
 }
