@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from './../store';
 import TblView from './../view/TblView';
-
+import { cols, colsOrder } from './constants'
 import { ModalContainer, ModalBody, ModalClose, Content } from './../bestPick/Style';
 
 
@@ -15,7 +15,7 @@ const round5 = (num) => {
     return a;
 }
 
-const sortStocks = (stocks) => {
+/*const sortStocks = (stocks) => {
     return stocks.sort((a, b) => {
         return round5(b.filters.NPMAnn) - round5(a.filters.NPMAnn) || round5(b.filters.NPMPrevAnn) - round5(a.filters.NPMPrevAnn) || round5(b.filters.NPMQtr) - round5(a.filters.NPMQtr) || round5(b.filters.NPMPrevQtr) - round5(a.filters.NPMPrevQtr) || round5(b.filters.NPMPYQtr) - round5(a.filters.NPMPYQtr)
 
@@ -37,12 +37,42 @@ const sortStocks = (stocks) => {
             || round5(a.filters['PERatio']) - round5(b.filters['PERatio'])
 
     })
+}*/
+
+
+
+const sortStocks = (stocks, sortByCol) => {
+    const asc = (v1, v2) => round5(v1) - round5(v2);
+    const desc = (v1, v2) => round5(v2) - round5(v1);
+
+    return stocks.sort((a, b) => {
+        const res = sortByCol.map((colOrder) => {
+            const colList = cols[colOrder];
+            return colList.cols.map((col) => {
+                if (colList.order === "asc") {
+                    return asc(a.filters[col], b.filters[col]);
+                } else {
+                    return desc(a.filters[col], b.filters[col]);
+                }
+            }).join('||');
+
+        }).join('||');
+
+        return eval(res);
+    });
 }
+
 const SortedStocks = () => {
     const [openSort, setSort] = useState(false);
+    const [sortList, setSortList] = useState(colsOrder);
+    const [sortBy, setSortBy] = useState(colsOrder);
     const [store] = useStore();
     const tmpStore = JSON.parse(JSON.stringify(store));
-    const stocks = sortStocks(tmpStore.stocks);
+    const stocks = sortStocks(tmpStore.stocks, sortBy);
+    const handleChange = e => setSortList(e.target.value);
+    const onSort = () => {
+        setSortBy(sortList.split(','));
+    }
     return (
         <>
             <button onClick={e => setSort(!openSort)} >Sort</button>
@@ -52,6 +82,7 @@ const SortedStocks = () => {
                         <ModalClose onClick={e => setSort(!openSort)} >X</ModalClose>
                         <Content>
                             <div>
+                                <input type="text" value={sortList} onChange={handleChange} /> <button onClick={onSort} >Sort</button>
                                 <TblView
                                     average={tmpStore.average}
                                     stocks={stocks}
@@ -73,3 +104,37 @@ const SortedStocks = () => {
 }
 
 export default SortedStocks;
+
+/*
+
+const a = [{
+  price:123,
+  mark:14
+},{
+  price:572,
+  mark:14
+},{
+  price:123,
+  mark:15
+}]
+
+const round = (v) => v;
+const sortby = [{name:'price',type:'desc'},{name:'mark',type:'asc'},{name:'price',type:'desc'}];
+
+const fun = (a,b)=>{
+  const asc = (v1,v2)=>v1-v2;
+  const desc = (v1,v2)=>v2-v1;
+  const cols = sortby.map((v)=>{
+    if(v.type==="asc"){
+      return asc(a[v.name],b[v.name])
+    } else {
+      return desc(a[v.name],b[v.name])
+    }
+  });
+
+  return eval(cols.join('||'))
+}
+console.log(a.sort(fun))
+
+*/
+
