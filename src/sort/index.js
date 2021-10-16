@@ -11,37 +11,10 @@ const round5 = (num) => {
     const diff = n % 5;
     const res = diff >= 3 ? n + (5 - diff) : n - diff;
     const a = num < 0 ? Number(-res) : Number(res);
-    console.log(num + "===" + a)
     return a;
 }
 
-/*const sortStocks = (stocks) => {
-    return stocks.sort((a, b) => {
-        return round5(b.filters.NPMAnn) - round5(a.filters.NPMAnn) || round5(b.filters.NPMPrevAnn) - round5(a.filters.NPMPrevAnn) || round5(b.filters.NPMQtr) - round5(a.filters.NPMQtr) || round5(b.filters.NPMPrevQtr) - round5(a.filters.NPMPrevQtr) || round5(b.filters.NPMPYQtr) - round5(a.filters.NPMPYQtr)
-
-            || round5(b.filters.OPM) - round5(a.filters.OPM) || round5(b.filters.OPMAnn) - round5(a.filters.OPMAnn) || round5(b.filters.OPMPrevAnn) - round5(a.filters.OPMPrevAnn) || round5(b.filters.OPMQtr) - round5(a.filters.OPMQtr) || round5(b.filters.OPMPrevQtr) - round5(a.filters.OPMPrevQtr) || round5(b.filters.OPMPYQtr) - round5(a.filters.OPMPYQtr)
-
-
-            || round5(b.filters.Salesgrowth) - round5(a.filters.Salesgrowth) || round5(b.filters.QtrSalesVar) - round5(a.filters.QtrSalesVar)
-
-            || round5(b.filters.EPS12M) - round5(a.filters.EPS12M) || round5(b.filters.EPSAnnRs) - round5(a.filters.EPSAnnRs) || round5(b.filters.EPSPrevAnnRs) - round5(a.filters.EPSPrevAnnRs) || round5(b.filters.EPSQtrRs) - round5(a.filters.EPSQtrRs) || round5(b.filters.EPSPrevQtrRs) - round5(a.filters.EPSPrevQtrRs) || round5(b.filters.EPSPYQtrRs) - round5(a.filters.EPSPYQtrRs)
-
-            || round5(b.filters.ROE) - round5(a.filters.ROE) || round5(b.filters.ROCE) - round5(a.filters.ROCE) || round5(b.filters.ROEPrevAnn) - round5(a.filters.ROEPrevAnn) || round5(b.filters.ROCEPrevYr) - round5(a.filters.ROCEPrevYr)
-
-            || round5(b.filters.FreeCashFlowRsCr) - round5(a.filters.FreeCashFlowRsCr)
-
-            || round5(b.filters.FCFPrevAnnRsCr) - round5(a.filters.FCFPrevAnnRsCr)
-
-            || round5(a.filters['Debt to Eq']) - round5(b.filters['Debt to Eq'])
-
-            || round5(a.filters['PERatio']) - round5(b.filters['PERatio'])
-
-    })
-}*/
-
-
-
-const sortStocks = (stocks, sortByCol) => {
+const sortStocks = (stocks, sortByCol, avg) => {
     const asc = (v1, v2) => round5(v1) - round5(v2);
     const desc = (v1, v2) => round5(v2) - round5(v1);
 
@@ -49,6 +22,11 @@ const sortStocks = (stocks, sortByCol) => {
         const res = sortByCol.map((colOrder) => {
             const colList = cols[colOrder];
             return colList.cols.map((col) => {
+                if (avg[col]
+                    && (avg[col].rm.includes(parseFloat(a.filters[col])) || avg[col].rm.includes(parseFloat(b.filters[col])))) {
+                    console.log("col-====" + col + "vala===" + a.filters[col] + "valb===" + a.filters[col])
+                    return 0;
+                }
                 if (colList.order === "asc") {
                     return asc(a.filters[col], b.filters[col]);
                 } else {
@@ -68,7 +46,7 @@ const SortedStocks = () => {
     const [sortBy, setSortBy] = useState(colsOrder);
     const [store] = useStore();
     const tmpStore = JSON.parse(JSON.stringify(store));
-    const stocks = sortStocks(tmpStore.stocks, sortBy);
+    const stocks = sortStocks(tmpStore.stocks, sortBy, tmpStore.average);
     const handleChange = e => setSortList(e.target.value);
     const onSort = () => {
         setSortBy(sortList.split(','));
@@ -104,37 +82,3 @@ const SortedStocks = () => {
 }
 
 export default SortedStocks;
-
-/*
-
-const a = [{
-  price:123,
-  mark:14
-},{
-  price:572,
-  mark:14
-},{
-  price:123,
-  mark:15
-}]
-
-const round = (v) => v;
-const sortby = [{name:'price',type:'desc'},{name:'mark',type:'asc'},{name:'price',type:'desc'}];
-
-const fun = (a,b)=>{
-  const asc = (v1,v2)=>v1-v2;
-  const desc = (v1,v2)=>v2-v1;
-  const cols = sortby.map((v)=>{
-    if(v.type==="asc"){
-      return asc(a[v.name],b[v.name])
-    } else {
-      return desc(a[v.name],b[v.name])
-    }
-  });
-
-  return eval(cols.join('||'))
-}
-console.log(a.sort(fun))
-
-*/
-

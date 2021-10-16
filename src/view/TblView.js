@@ -32,14 +32,13 @@ const Heading = ({ stocks, average, dispatch }) => {
 }
 
 const CheckCmp = ({ name, value, onChange, average }) => {
-
     const { rm } = average[name];
     const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false
     const [checked, setChecked] = useState(isChecked);
     useEffect(() => {
         const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false;
         setChecked(isChecked);
-    }, [...rm]);
+    });
 
     const handleChange = (e) => {
         setChecked(!checked);
@@ -99,7 +98,6 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispat
         let tmp = [...compare];
         if (!isHighlight) {
             tmp.push(rowNum);
-            console.log(rowNum)
         } else {
             const index = tmp.indexOf(rowNum);
             if (index >= 0) {
