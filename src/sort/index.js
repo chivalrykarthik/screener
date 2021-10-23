@@ -14,9 +14,25 @@ const round5 = (num) => {
     return a;
 }
 
+const addRank = (store) => {
+    const fields = ['EarningsYield', 'ROCE'];
+    const asc = (v1, v2) => parseFloat(v1) - parseFloat(v2);
+    const desc = (v1, v2) => parseFloat(v2) - parseFloat(v1);
+    for (let i = 0; i < fields.length; i++) {
+        const col = fields[i];
+        store.stocks.sort((a, b) => desc(a.filters[col], b.filters[col]));
+        for (let i = 0; i < store.stocks.length; i++) {
+            store.stocks[i].filters['Rank'] = (store.stocks[i].filters['Rank'] || 0) + (i + 1);
+            store.stocks[i].filters[col + 'Rank'] = i + 1;
+        }
+    }
+
+    return store;
+}
+
 const sortStocks = (stocks, sortByCol, avg) => {
-    const asc = (v1, v2) => round5(v1) - round5(v2);
-    const desc = (v1, v2) => round5(v2) - round5(v1);
+    const asc = (v1, v2, isRound) => isRound ? round5(v1) - round5(v2) : v1 - v2;
+    const desc = (v1, v2, isRound) => isRound ? round5(v2) - round5(v1) : v2 - v1;
 
     return stocks.sort((a, b) => {
         const res = sortByCol.map((colOrder) => {
@@ -24,7 +40,6 @@ const sortStocks = (stocks, sortByCol, avg) => {
             return colList.cols.map((col) => {
                 if (avg[col]
                     && (avg[col].rm.includes(parseFloat(a.filters[col])) || avg[col].rm.includes(parseFloat(b.filters[col])))) {
-                    console.log("col-====" + col + "vala===" + a.filters[col] + "valb===" + a.filters[col])
                     return 0;
                 }
                 if (colList.order === "asc") {
@@ -46,7 +61,8 @@ const SortedStocks = () => {
     const [sortBy, setSortBy] = useState(colsOrder);
     const [store] = useStore();
     const tmpStore = JSON.parse(JSON.stringify(store));
-    const stocks = sortStocks(tmpStore.stocks, sortBy, tmpStore.average);
+    const stocksRank = addRank(tmpStore);
+    const stocks = sortStocks(stocksRank.stocks, sortBy, stocksRank.average);
     const handleChange = e => setSortList(e.target.value);
     const onSort = () => {
         setSortBy(sortList.split(','));
@@ -62,12 +78,12 @@ const SortedStocks = () => {
                             <div>
                                 <input type="text" value={sortList} onChange={handleChange} /> <button onClick={onSort} >Sort</button>
                                 <TblView
-                                    average={tmpStore.average}
+                                    average={stocksRank.average}
                                     stocks={stocks}
                                     dispatch={() => { }}
-                                    filtersCnt={tmpStore.filtersCnt}
-                                    searchParams={tmpStore.searchParams}
-                                    compare={tmpStore.compare}
+                                    filtersCnt={stocksRank.filtersCnt}
+                                    searchParams={stocksRank.searchParams}
+                                    compare={stocksRank.compare}
                                 />
 
                             </div>

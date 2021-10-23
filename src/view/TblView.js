@@ -24,7 +24,11 @@ const Heading = ({ stocks, average, dispatch }) => {
     return (
         <>
             <th>StockName</th>
-            {cols.map(col => <th onClick={sortTable.bind(null, col)} >{col}<Avg>{(Math.round(average[col].val / average[col].len))}</Avg></th>)}
+            {cols.map(col => {
+                if (!average?.[col]?.val) return <th onClick={sortTable.bind(null, col)} >{col}</th>;
+                return <th onClick={sortTable.bind(null, col)} >{col}<Avg>{(Math.round(average[col].val / average[col].len))}</Avg></th>;
+            })
+            }
             <th>Matches</th>
             <th>Action</th>
         </>
@@ -32,7 +36,7 @@ const Heading = ({ stocks, average, dispatch }) => {
 }
 
 const CheckCmp = ({ name, value, onChange, average }) => {
-    const { rm } = average[name];
+    const { rm } = average && average[name] ? average[name] : { rm: [] };
     const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false
     const [checked, setChecked] = useState(isChecked);
     useEffect(() => {
