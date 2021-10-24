@@ -18,3 +18,5 @@ export const cols = {
     rr: { cols: ['ROCERank'], order: 'asc', isRound: false }
 };
 export const colsOrder = ['qqp', 'qqs', 'yyp', 'yys', 'eps', 'npm', 'opm', 'sales', 'roe', 'roce', 'cashFlow', 'debt', 'pe', 'ey'];
+
+export const rankCols = ['EarningsYield', 'ROCE'];

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from './../store';
 import TblView from './../view/TblView';
-import { cols, colsOrder } from './constants'
+import { cols, colsOrder, rankCols } from './constants'
 import { ModalContainer, ModalBody, ModalClose, Content } from './../bestPick/Style';
 
 
@@ -14,8 +14,8 @@ const round5 = (num) => {
     return a;
 }
 
-const addRank = (store) => {
-    const fields = ['EarningsYield', 'ROCE'];
+const addRank = (store, rankCols) => {
+    const fields = rankCols;
     const asc = (v1, v2) => parseFloat(v1) - parseFloat(v2);
     const desc = (v1, v2) => parseFloat(v2) - parseFloat(v1);
     for (let i = 0; i < fields.length; i++) {
@@ -59,14 +59,16 @@ const SortedStocks = () => {
     const [openSort, setSort] = useState(false);
     const [sortList, setSortList] = useState(colsOrder);
     const [sortBy, setSortBy] = useState(colsOrder);
+    const [rankList, setRankList] = useState(rankCols);
+    const [rankBy, setRankBy] = useState(rankCols);
     const [store] = useStore();
     const tmpStore = JSON.parse(JSON.stringify(store));
-    const stocksRank = addRank(tmpStore);
+    const stocksRank = addRank(tmpStore, rankBy);
     const stocks = sortStocks(stocksRank.stocks, sortBy, stocksRank.average);
     const handleChange = e => setSortList(e.target.value);
-    const onSort = () => {
-        setSortBy(sortList.split(','));
-    }
+    const handleRank = e => setRankList(e.target.value);
+    const onSort = () => setSortBy(sortList.split(','));
+    const onRank = () => setRankBy(rankList.split(','));
     return (
         <>
             <button onClick={e => setSort(!openSort)} >Sort</button>
@@ -77,6 +79,7 @@ const SortedStocks = () => {
                         <Content>
                             <div>
                                 <input type="text" value={sortList} onChange={handleChange} /> <button onClick={onSort} >Sort</button>
+                                <input type="text" value={rankList} onChange={handleRank} /> <button onClick={onRank} >Rank</button>
                                 <TblView
                                     average={stocksRank.average}
                                     stocks={stocks}
