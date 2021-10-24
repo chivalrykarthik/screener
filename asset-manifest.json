@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/screener/static/css/main.b781181e.chunk.css",
-    "main.js": "/screener/static/js/main.e4b7065d.chunk.js",
-    "main.js.map": "/screener/static/js/main.e4b7065d.chunk.js.map",
+    "main.js": "/screener/static/js/main.047641de.chunk.js",
+    "main.js.map": "/screener/static/js/main.047641de.chunk.js.map",
     "runtime-main.js": "/screener/static/js/runtime-main.07865ca0.js",
     "runtime-main.js.map": "/screener/static/js/runtime-main.07865ca0.js.map",
-    "static/js/2.5c570757.chunk.js": "/screener/static/js/2.5c570757.chunk.js",
-    "static/js/2.5c570757.chunk.js.map": "/screener/static/js/2.5c570757.chunk.js.map",
+    "static/js/2.5316e780.chunk.js": "/screener/static/js/2.5316e780.chunk.js",
+    "static/js/2.5316e780.chunk.js.map": "/screener/static/js/2.5316e780.chunk.js.map",
     "static/js/3.00ca13df.chunk.js": "/screener/static/js/3.00ca13df.chunk.js",
     "static/js/3.00ca13df.chunk.js.map": "/screener/static/js/3.00ca13df.chunk.js.map",
     "index.html": "/screener/index.html",
     "static/css/main.b781181e.chunk.css.map": "/screener/static/css/main.b781181e.chunk.css.map",
-    "static/js/2.5c570757.chunk.js.LICENSE.txt": "/screener/static/js/2.5c570757.chunk.js.LICENSE.txt"
+    "static/js/2.5316e780.chunk.js.LICENSE.txt": "/screener/static/js/2.5316e780.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.07865ca0.js",
-    "static/js/2.5c570757.chunk.js",
+    "static/js/2.5316e780.chunk.js",
     "static/css/main.b781181e.chunk.css",
-    "static/js/main.e4b7065d.chunk.js"
+    "static/js/main.047641de.chunk.js"
   ]
 }
