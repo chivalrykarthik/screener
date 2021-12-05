@@ -20,7 +20,7 @@ function App() {
     <>
       <Header>
 
-        <div>v1.0</div>
+        <div>v1.1</div>
       </Header>
       <Container>
         <Txt />
