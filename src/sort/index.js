@@ -19,8 +19,10 @@ const addRank = (store, rankCols) => {
     const asc = (v1, v2) => parseFloat(v1) - parseFloat(v2);
     const desc = (v1, v2) => parseFloat(v2) - parseFloat(v1);
     for (let i = 0; i < fields.length; i++) {
-        const col = fields[i];
-        store.stocks.sort((a, b) => desc(a.filters[col], b.filters[col]));
+        const field = fields[i].split('#');
+        const col = field[0];
+        const isAsc = field.length > 1 ? true : false;
+        store.stocks.sort((a, b) => isAsc ? asc(a.filters[col], b.filters[col]) : desc(a.filters[col], b.filters[col]));
         for (let i = 0; i < store.stocks.length; i++) {
             store.stocks[i].filters['Rank'] = (store.stocks[i].filters['Rank'] || 0) + (i + 1);
             store.stocks[i].filters[col + 'Rank'] = i + 1;
