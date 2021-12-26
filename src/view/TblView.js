@@ -5,7 +5,7 @@ import { Avg } from './../Styles/Table';
 import { COLOR } from './../constants'
 
 import './../Tbl.css';
-const Heading = ({ stocks, average, dispatch }) => {
+const Heading = ({ stocks, average, dispatch, selectAll }) => {
     const [isAscending, setAscending] = useState(false);
     const { filters } = stocks[0];
     const cols = Object.keys(filters);
@@ -23,7 +23,7 @@ const Heading = ({ stocks, average, dispatch }) => {
     }
     return (
         <>
-            <th>ID</th>
+            <th>ID <input type="checkbox" onChange={selectAll} /></th>
             <th>StockName</th>
             {cols.map(col => {
                 if (!average?.[col]?.val) return <th onClick={sortTable.bind(null, col)} >{col}</th>;
@@ -152,6 +152,7 @@ const Tbl = (
     { average, stocks, filtersCnt, searchParams, compare, dispatch }
 ) => {
     const [selectedIds, setSelectedId] = useState([]);
+    const [isSelectAll, setSelectAll] = useState(false);
     const selectedRow = (id, e) => {
         const isChecked = e.target.checked;
 
@@ -167,13 +168,22 @@ const Tbl = (
         dispatch({ type: action.ADD_AVG });
         setSelectedId([]);
     }
+    const selectAll = () => {
+        if (!isSelectAll) {
+            const allIds = stocks.map(stock => stock.id);
+            setSelectedId(allIds);
+        } else {
+            setSelectedId([]);
+        }
+        setSelectAll(!isSelectAll);
+    }
     return (
         <>
             <button onClick={handleDelete} >Delete</button>
             <table border="1">
                 <thead>
                     <tr>
-                        <Heading average={average} stocks={stocks} dispatch={dispatch} />
+                        <Heading selectAll={selectAll} average={average} stocks={stocks} dispatch={dispatch} />
                     </tr>
                 </thead>
                 <tbody>
@@ -181,7 +191,7 @@ const Tbl = (
                 </tbody>
                 <thead>
                     <tr bold="1">
-                        <Heading average={average} stocks={stocks} dispatch={dispatch} />
+                        <Heading selectAll={selectAll} average={average} stocks={stocks} dispatch={dispatch} />
                     </tr>
                 </thead>
             </table>
