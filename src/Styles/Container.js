@@ -8,7 +8,8 @@ position:relative;
 
 const Header = styled.div`
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
+    margin: 10px 40px 10px 40px;
 `;
 export {
     Container,

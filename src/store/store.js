@@ -5,7 +5,8 @@ import {
     addToSearch,
     updFilter,
     updAvg,
-    deleteStock
+    deleteStock,
+    deleteStocks
 } from './util';
 export const initialState = {
     txt: '',
@@ -50,7 +51,10 @@ export const reducer = (state, action) => {
             const updAverage = updAvg({ ...data, average: state.average });
             return { ...state, average: updAverage };
         case "DELETE_STOCK":
-            const updStocks = deleteStock(data.key, state.stocks);
+            const updStock = deleteStock(data.key, state.stocks);
+            return { ...state, stocks: updStock };
+        case "DELETE_STOCKS":
+            const updStocks = deleteStocks(data.key, state.stocks);
             return { ...state, stocks: updStocks };
         case "UPD_HIGH_AVG":
             return { ...state, highAvg: data.value };

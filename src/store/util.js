@@ -2,6 +2,7 @@ export const parseStocks = (txt) => {
     try {
         let tmpStocks = JSON.parse(txt);
         if (!Array.isArray(tmpStocks)) { tmpStocks = [tmpStocks] }
+        tmpStocks.forEach((_, k) => tmpStocks[k].id = k + 1);
         return tmpStocks;
     } catch (e) {
         alert("Invlaid JSON")
@@ -91,6 +92,16 @@ export const updAvg = ({ updType, filter, num, average }) => {
 
 export const deleteStock = (key, stocks) => {
     const newStocks = [...stocks.slice(0, key), ...stocks.slice(key + 1)]
+    return newStocks;
+};
+
+export const deleteStocks = (keys, stocks) => {
+    const newStocks = stocks.reduce((acc, stock) => {
+        if (keys.includes(stock.id)) {
+            return acc;
+        }
+        return [...acc, stock]
+    }, [])
     return newStocks;
 };
 

@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
 import action from './../store/action';
 import operators from './../operators';
 import { Avg } from './../Styles/Table';
 import { COLOR } from './../constants'
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 import './../Tbl.css';
 const Heading = ({ stocks, average, dispatch }) => {
     const [isAscending, setAscending] = useState(false);
@@ -23,6 +23,7 @@ const Heading = ({ stocks, average, dispatch }) => {
     }
     return (
         <>
+            <th>ID</th>
             <th>StockName</th>
             {cols.map(col => {
                 if (!average?.[col]?.val) return <th onClick={sortTable.bind(null, col)} >{col}</th>;
@@ -42,7 +43,7 @@ const CheckCmp = ({ name, value, onChange, average }) => {
     useEffect(() => {
         const isChecked = (value === '' || rm.includes(parseFloat(value))) ? true : false;
         setChecked(isChecked);
-    });
+    }, []);
 
     const handleChange = (e) => {
         setChecked(!checked);
@@ -133,9 +134,14 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispat
     )
 }
 const Rows = (props) => {
+    const { stock: { id }, selectedRow, selectedIds } = props;
     return (
         <>
             <tr>
+                <td>
+                    {id}
+                    <input type="checkbox" checked={selectedIds.includes(id) ? "checked" : ""} onChange={selectedRow.bind(null, id)} />
+                </td>
                 <Col {...props} />
             </tr>
         </>
@@ -145,9 +151,25 @@ const Rows = (props) => {
 const Tbl = (
     { average, stocks, filtersCnt, searchParams, compare, dispatch }
 ) => {
+    const [selectedIds, setSelectedId] = useState([]);
+    const selectedRow = (id, e) => {
+        const isChecked = e.target.checked;
 
+        if (isChecked) {
+            setSelectedId([...selectedIds, id]);
+        } else {
+            const i = selectedIds.indexOf(id);
+            setSelectedId([...selectedIds.slice(0, i), ...selectedIds.slice(i + 1)]);
+        }
+    }
+    const handleDelete = () => {
+        dispatch({ type: action.DELETE_STOCKS, data: { key: selectedIds } });
+        dispatch({ type: action.ADD_AVG });
+        setSelectedId([]);
+    }
     return (
         <>
+            <button onClick={handleDelete} >Delete</button>
             <table border="1">
                 <thead>
                     <tr>
@@ -155,7 +177,7 @@ const Tbl = (
                     </tr>
                 </thead>
                 <tbody>
-                    {stocks.map((stock, rowNum) => <Rows stock={stock} compare={compare} rowNum={rowNum} average={average} filtersCnt={filtersCnt} searchParams={searchParams} dispatch={dispatch} />)}
+                    {stocks.map((stock, rowNum) => <Rows selectedIds={selectedIds} selectedRow={selectedRow} stock={stock} compare={compare} rowNum={rowNum} average={average} filtersCnt={filtersCnt} searchParams={searchParams} dispatch={dispatch} />)}
                 </tbody>
                 <thead>
                     <tr bold="1">
