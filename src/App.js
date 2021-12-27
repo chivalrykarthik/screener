@@ -16,9 +16,9 @@ function App() {
         <div>
           <button onClick={handleChart} >Show Chart</button>
         </div>
-        <div>v1.3</div>
+        <div>v1.4</div>
       </Header>
-      <Container>
+      <Container showChart={showChart}>
         {showChart ? <Charts /> : <Screener />}
 
 
