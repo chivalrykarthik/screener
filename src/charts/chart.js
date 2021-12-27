@@ -8,6 +8,14 @@ import {
     Line
 } from 'recharts'
 
+function generateRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 const Chart = ({ data = [], uniqYear = [] }) => {
     return (
         <>
@@ -20,7 +28,7 @@ const Chart = ({ data = [], uniqYear = [] }) => {
                     <Tooltip />
                     <Legend />
                     {
-                        uniqYear.map((year) => <Line type="monotone" dataKey={year} stroke="#8884d8" />)
+                        uniqYear.map((year) => <Line type="monotone" dataKey={year} stroke={generateRandomColor()} />)
                     }
 
                 </LineChart> : null
