@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Chart from './chart';
+import loadData from './util';
 
 const Charts = () => {
     const [data, setData] = useState('');
@@ -19,6 +20,15 @@ const Charts = () => {
         };
         reader.readAsText(e.target.files[0])
     }
+    const handleSelect = async (e) => {
+        const val = e.target.value;
+        const result = await loadData(val);
+
+        if (result?.data) {
+            setData(result.data);
+        }
+    }
+    const clearChart = () => setData('');
     const loadFile = () => {
         const tmpChartData = [...chartData];
         const tmpData = data.split('\n').slice(1);
@@ -52,7 +62,15 @@ const Charts = () => {
         <>
             <input type="file" onChange={handleFile} />
             <input type="text" type="number" value={noOfDays} onChange={handleChange} />
+            <select onChange={handleSelect} >
+                {Array.from({ length: 21 }, (_, key) => {
+                    return (
+                        <option value={key}>{key}</option>
+                    )
+                })}
+            </select>
             <button onClick={loadFile} >Load</button>
+            <button onClick={clearChart} >Clear</button>
 
             <Chart data={chartData} uniqYear={uniqYear} />
         </>
