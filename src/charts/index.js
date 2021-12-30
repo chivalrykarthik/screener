@@ -28,7 +28,11 @@ const Charts = () => {
             setData(result.data);
         }
     }
-    const clearChart = () => setData('');
+    const clearChart = () => {
+        setData('');
+        setChartDat([]);
+        setYear([]);
+    }
     const loadFile = () => {
         const tmpChartData = [...chartData];
         const tmpData = data.split('\n').slice(1);
