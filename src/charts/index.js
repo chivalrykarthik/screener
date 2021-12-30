@@ -7,10 +7,15 @@ const Charts = () => {
     const [chartData, setChartDat] = useState([]);
     const [uniqYear, setYear] = useState([]);
     const [noOfDays, setNoOfDays] = useState(0);
+    const [yAxis, setYAxis] = useState('5000,20000');
     const handleChange = (e) => {
         const val = e.target.value;
         setNoOfDays(val);
     }
+    const handleAxisChange = (e) => {
+        const val = e.target.value;
+        setYAxis(val);
+    };
     const handleFile = (e) => {
         e.preventDefault()
         const reader = new FileReader()
@@ -22,6 +27,7 @@ const Charts = () => {
     }
     const handleSelect = async (e) => {
         const val = e.target.value;
+        if (!val) return;
         const result = await loadData(val);
 
         if (result?.data) {
@@ -66,7 +72,9 @@ const Charts = () => {
         <>
             <input type="file" onChange={handleFile} />
             <input type="text" type="number" value={noOfDays} onChange={handleChange} />
+            <input type="text" value={yAxis} onChange={handleAxisChange} />
             <select onChange={handleSelect} >
+                <option value=''>Select</option>
                 {Array.from({ length: 21 }, (_, key) => {
                     return (
                         <option value={key}>{key}</option>
@@ -76,7 +84,11 @@ const Charts = () => {
             <button onClick={loadFile} >Load</button>
             <button onClick={clearChart} >Clear</button>
 
-            <Chart data={chartData} uniqYear={uniqYear} />
+            <Chart
+                data={chartData}
+                uniqYear={uniqYear}
+                yAxis={yAxis}
+            />
         </>
     )
 }

@@ -16,7 +16,8 @@ function generateRandomColor() {
     }
     return color;
 }
-const Chart = ({ data = [], uniqYear = [] }) => {
+const Chart = ({ data = [], uniqYear = [], yAxis = '' }) => {
+    const axis = yAxis ? yAxis.split(',').map(v => parseInt(v)) : [];
     return (
         <>
             {
@@ -24,7 +25,7 @@ const Chart = ({ data = [], uniqYear = [] }) => {
                 >
                     <CartesianGrid strokeDasharray="1 1" />
                     <XAxis dataKey="name" />
-                    <YAxis domain={[5000, 20000]} />
+                    <YAxis domain={axis} />
                     <Tooltip />
                     <Legend />
                     {
