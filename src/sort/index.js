@@ -69,8 +69,8 @@ const SortedStocks = () => {
     const stocks = sortStocks(stocksRank.stocks, sortBy, stocksRank.average);
     const handleChange = e => setSortList(e.target.value);
     const handleRank = e => setRankList(e.target.value);
-    const onSort = () => setSortBy(sortList.split(','));
-    const onRank = () => setRankBy(rankList.split(','));
+    const onSort = () => setSortBy(Array.isArray(sortList) ? sortList : sortList.split(','));
+    const onRank = () => setRankBy(Array.isArray(rankList) ? rankList : rankList.split(','));
     return (
         <>
             <button onClick={e => setSort(!openSort)} >Sort</button>
@@ -90,12 +90,9 @@ const SortedStocks = () => {
                                     searchParams={stocksRank.searchParams}
                                     compare={stocksRank.compare}
                                 />
-
                             </div>
-
                         </Content>
                     </ModalBody>
-
                 </ModalContainer>)
             }
         </>
