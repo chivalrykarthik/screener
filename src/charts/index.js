@@ -9,6 +9,8 @@ const Charts = () => {
     const [noOfDays, setNoOfDays] = useState(0);
     const [yAxis, setYAxis] = useState('5000,20000');
     const [isCompare, setCompare] = useState(false);
+    const [index, setIndex] = useState('');
+    const [compareData, setCompareData] = useState('');
     const handleChange = (e) => {
         const val = e.target.value;
         setNoOfDays(val);
@@ -30,13 +32,21 @@ const Charts = () => {
         };
         reader.readAsText(e.target.files[0])
     }
-    const handleSelect = async (e) => {
+    const handleIndex = (e) => {
+        const val = e.target.value;
+        setIndex(val);
+    }
+    const handleSelect = async (type, e) => {
         const val = e.target.value;
         if (!val) return;
-        const result = await loadData(val);
+        const result = await loadData(val, index);
 
         if (result?.data) {
-            setData(result.data);
+            if (type != 'other') {
+                setData(result.data);
+            } else {
+                setCompareData(result.data);
+            }
         }
     }
     const clearChart = () => {
@@ -44,9 +54,9 @@ const Charts = () => {
         setChartDat([]);
         setYear([]);
     }
-    const indexCompareChart = () => {
+    const indexCompareChart = (dt, type) => {
         const tmpChartData = [...chartData];
-        const tmpData = data.split('\n').slice(1);
+        const tmpData = dt.split('\n').slice(1);
         const yr = [...uniqYear];
         let i = 0;
         let [, startingPrice] = tmpData[0].split(',');
@@ -64,14 +74,13 @@ const Charts = () => {
                         name: `${day}-${month}`
                     };
                 }
-                tmpChartData[i][year] = Number(((open - startingPrice) / startingPrice) * 100).toFixed(2);
-                if (!yr.includes(year)) {
-                    yr.push(year);
+                tmpChartData[i][type || year] = Number(((open - startingPrice) / startingPrice) * 100).toFixed(2);
+                if (!yr.includes(type) && !yr.includes(year)) {
+                    yr.push(type || year);
                 }
                 i++;
             }
         });
-        console.log(tmpChartData)
         setChartDat(tmpChartData);
         setYear(yr);
     }
@@ -105,7 +114,11 @@ const Charts = () => {
     }
     const loadFile = () => {
         if (isCompare) {
-            return indexCompareChart();
+            indexCompareChart(data, 'n50');
+            if (compareData) {
+                indexCompareChart(compareData, index);
+            }
+            return;
         }
         return basicChart();
     }
@@ -116,9 +129,9 @@ const Charts = () => {
 
             <input type="text" type="number" value={noOfDays} onChange={handleChange} />
             <input type="text" value={yAxis} onChange={handleAxisChange} />
-            <select onChange={handleSelect} >
+            <select onChange={handleSelect.bind(null, 'n50')} >
                 <option value=''>Select</option>
-                {Array.from({ length: 21 }, (_, key) => {
+                {Array.from({ length: 22 }, (_, key) => {
                     return (
                         <option value={key}>{key}</option>
                     )
@@ -128,9 +141,13 @@ const Charts = () => {
             {
                 !isCompare ? null : (
                     <>
-                        <select onChange={handleSelect} >
+                        <select onChange={handleIndex} >
                             <option value=''>Select</option>
-                            {Array.from({ length: 21 }, (_, key) => {
+                            <option value="auto">Auto</option>
+                        </select>
+                        <select onChange={handleSelect.bind(null, 'other')} >
+                            <option value=''>Select</option>
+                            {Array.from({ length: 22 }, (_, key) => {
                                 return (
                                     <option value={key}>{key}</option>
                                 )

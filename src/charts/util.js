@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 
-const loadData = async (yr) => {
+const loadData = async (yr, index) => {
     try {
-        const res = await axios.get(`/screener/points/${yr}`);
+        const reqIndex = index || 'n50';
+        const res = await axios.get(`/screener/points/${reqIndex}/${yr}`);
         return res;
     } catch (e) {
         alert('Failed to load');
