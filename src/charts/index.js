@@ -15,6 +15,7 @@ const Charts = () => {
         chartData,
         data
     } = useLoadFile();
+    const [selectedYear, setSelectedYear] = useState('');
     const [yAxis, setYAxis] = useState('5000,20000');
     const [isCompare, setCompare] = useState(false);
     const [index, setIndex] = useState('');
@@ -42,14 +43,21 @@ const Charts = () => {
         };
         reader.readAsText(e.target.files[0])
     }
-    const handleIndex = (e) => {
+    const handleIndex = async (e) => {
         const val = e.target.value;
+        if (!val) return;
+
+        const result = await loadData(selectedYear, val);
+
+        if (result?.data) {
+            setCompareData(result.data);
+        }
         setIndex(val);
     }
     const handleSelect = async (type, e) => {
         const val = e.target.value;
         if (!val) return;
-        const result = await loadData(val, index);
+        const result = await loadData(val, type);
 
         if (result?.data) {
             if (type != 'other') {
@@ -58,6 +66,7 @@ const Charts = () => {
                 setCompareData(result.data);
             }
         }
+        setSelectedYear(val);
     }
     const clearChart = () => {
         setData('');
@@ -98,15 +107,17 @@ const Charts = () => {
                         <select onChange={handleIndex} >
                             <option value=''>Select</option>
                             <option value="auto">Auto</option>
+                            <option value="bank">Bank</option>
                         </select>
-                        <select onChange={handleSelect.bind(null, 'other')} >
+
+                        {/*<select onChange={handleSelect.bind(null, 'other')} >
                             <option value=''>Select</option>
                             {Array.from({ length: 22 }, (_, key) => {
                                 return (
                                     <option value={key}>{key}</option>
                                 )
                             })}
-                        </select>
+                        </select>*/}
                         <button onClick={loadFile} >Compare</button>
                     </>
                 )
