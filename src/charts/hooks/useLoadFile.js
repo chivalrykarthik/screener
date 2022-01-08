@@ -17,8 +17,6 @@ const useLoadFile = () => {
             if (parseInt(noOfDays) > 0 && index % parseInt(noOfDays) != 0) return;
             let [date, open, , close] = val.split(',');
             open = close;
-            if (open.includes('-')) return;
-            console.log(open)
             if (typeof date === 'string' && typeof open === 'string') {
                 date = date.replace(/"/g, '').trim();
                 open = open.replace(/"/g, '').trim();
