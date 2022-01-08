@@ -93,7 +93,7 @@ const Charts = () => {
             <input type="text" value={yAxis} onChange={handleAxisChange} />
             <select onChange={handleSelect.bind(null, 'n50')} >
                 <option value=''>Select</option>
-                {Array.from({ length: 22 }, (_, key) => {
+                {Array.from({ length: 23 }, (_, key) => {
                     return (
                         <option value={key}>{key}</option>
                     )
