@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import Chart from './chart';
 import loadData from './util';
+import useLoadFile from './hooks/useLoadFile';
 
 const Charts = () => {
-    const [data, setData] = useState('');
-    const [chartData, setChartDat] = useState([]);
-    const [uniqYear, setYear] = useState([]);
-    const [noOfDays, setNoOfDays] = useState(0);
+    const {
+        setNoOfDays,
+        setData,
+        setChartDat,
+        setYear,
+        processData,
+        uniqYear,
+        noOfDays,
+        chartData,
+        data
+    } = useLoadFile();
     const [yAxis, setYAxis] = useState('5000,20000');
     const [isCompare, setCompare] = useState(false);
     const [index, setIndex] = useState('');
@@ -17,6 +25,8 @@ const Charts = () => {
     }
     const handleCheckbox = (e) => {
         const isChecked = e.target.checked;
+        const yAxisDefaults = isChecked ? '-100,200' : '5000,20000';
+        setYAxis(yAxisDefaults);
         setCompare(isChecked);
     }
     const handleAxisChange = (e) => {
@@ -54,73 +64,16 @@ const Charts = () => {
         setChartDat([]);
         setYear([]);
     }
-    const indexCompareChart = (dt, type) => {
-        const tmpChartData = [...chartData];
-        const tmpData = dt.split('\n').slice(1);
-        const yr = [...uniqYear];
-        let i = 0;
-        let [, startingPrice] = tmpData[0].split(',');
-        startingPrice = startingPrice.replace(/"/g, '').trim();
-        tmpData.forEach((val, index) => {
-            if (parseInt(noOfDays) > 0 && index % parseInt(noOfDays) != 0) return;
-            let [date, open] = val.split(',');
 
-            if (typeof date === 'string' && typeof open === 'string') {
-                date = date.replace(/"/g, '').trim();
-                open = open.replace(/"/g, '').trim();
-                const [day, month, year] = date.split('-');
-                if (!tmpChartData[i]) {
-                    tmpChartData[i] = {
-                        name: `${day}-${month}`
-                    };
-                }
-                tmpChartData[i][type || year] = Number(((open - startingPrice) / startingPrice) * 100).toFixed(2);
-                if (!yr.includes(type) && !yr.includes(year)) {
-                    yr.push(type || year);
-                }
-                i++;
-            }
-        });
-        setChartDat(tmpChartData);
-        setYear(yr);
-    }
-    const basicChart = () => {
-        const tmpChartData = [...chartData];
-        const tmpData = data.split('\n').slice(1);
-        const yr = [...uniqYear];
-        let i = 0;
-        tmpData.forEach((val, index) => {
-            if (parseInt(noOfDays) > 0 && index % parseInt(noOfDays) != 0) return;
-            let [date, open] = val.split(',');
-
-            if (typeof date === 'string' && typeof open === 'string') {
-                date = date.replace(/"/g, '').trim();
-                open = open.replace(/"/g, '').trim();
-                const [day, month, year] = date.split('-');
-                if (!tmpChartData[i]) {
-                    tmpChartData[i] = {
-                        name: `${day}-${month}`
-                    };
-                }
-                tmpChartData[i][year] = open;
-                if (!yr.includes(year)) {
-                    yr.push(year);
-                }
-                i++;
-            }
-        });
-        setChartDat(tmpChartData);
-        setYear(yr);
-    }
     const loadFile = () => {
         if (isCompare) {
-            indexCompareChart(data, 'n50');
+            processData(data, 'n50', isCompare);
             if (compareData) {
-                indexCompareChart(compareData, index);
+                processData(compareData, index, isCompare);
             }
             return;
         }
-        return basicChart();
+        return processData(data, '', isCompare);
     }
     return (
         <>
@@ -137,6 +90,7 @@ const Charts = () => {
                     )
                 })}
             </select>
+            <button onClick={loadFile} >Load</button>
 
             {
                 !isCompare ? null : (
@@ -153,11 +107,12 @@ const Charts = () => {
                                 )
                             })}
                         </select>
+                        <button onClick={loadFile} >Compare</button>
                     </>
                 )
 
             }
-            <button onClick={loadFile} >Load</button>
+
             <button onClick={clearChart} >Clear</button>
 
             <Chart
