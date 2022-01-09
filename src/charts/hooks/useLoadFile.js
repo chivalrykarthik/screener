@@ -41,7 +41,11 @@ const useLoadFile = () => {
         setChartDat(tmpChartData);
         setYear(yr);
     }
-
+    const clearLast = () => {
+        const tmp = [...uniqYear];
+        tmp.pop();
+        setYear(tmp);
+    }
 
     return {
         setNoOfDays,
@@ -49,6 +53,7 @@ const useLoadFile = () => {
         setChartDat,
         setYear,
         processData,
+        clearLast,
         uniqYear,
         noOfDays,
         chartData,

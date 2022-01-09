@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Chart from './chart';
 import loadData from './util';
 import useLoadFile from './hooks/useLoadFile';
-
 const Charts = () => {
     const {
         setNoOfDays,
@@ -10,6 +9,7 @@ const Charts = () => {
         setChartDat,
         setYear,
         processData,
+        clearLast,
         uniqYear,
         noOfDays,
         chartData,
@@ -128,8 +128,8 @@ const Charts = () => {
 
             }
 
-            <button onClick={clearChart} >Clear</button>
-
+            <button onClick={clearLast} >Clear Index</button>
+            <button onClick={clearChart} >Clear All</button>
             <Chart
                 data={chartData}
                 uniqYear={uniqYear}
