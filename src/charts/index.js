@@ -108,6 +108,10 @@ const Charts = () => {
                             <option value=''>Select</option>
                             <option value="auto">Auto</option>
                             <option value="bank">Bank</option>
+                            <option value="fs">FS</option>
+                            <option value="fmcg">FMCG</option>
+                            <option value="it">IT</option>
+                            <option value="media">Media</option>
                         </select>
 
                         {/*<select onChange={handleSelect.bind(null, 'other')} >
