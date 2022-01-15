@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Chart from './chart';
 import loadData from './util';
 import useLoadFile from './hooks/useLoadFile';
+import Stats from './../stats';
 const Charts = () => {
     const {
         setNoOfDays,
@@ -86,6 +87,7 @@ const Charts = () => {
     }
     return (
         <>
+            <Stats />
             <input type="file" onChange={handleFile} />
             <input type="checkbox" onChange={handleCheckbox} /> Compare
 
