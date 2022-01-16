@@ -28,23 +28,6 @@ const Row = ({ sectors, index }) => {
             }
         </>
     )
-    /* return (
-         <>
-             {sectors.reduce((acc, sector) => {
-                 const dt = data[sector][index];
-                 if (!dt) return acc;
-                 const row = (
-                     <>
-                         <tr>
-                             <td>{sector}</td>
-                             <td>{dt}</td>
-                         </tr>
-                     </>
-                 );
-                 return [...acc, row]
-             }, [])}
-         </>
-     )*/
 }
 const Tbl = (props) => {
     return (
@@ -59,9 +42,21 @@ const Tbl = (props) => {
         </table>
     )
 }
+const prepareState = (sectors) => {
+    let res = {};
+    Array.from({ length: 23 }, (_, index) => {
+        const obj = prepareObj(sectors, index);
+        sectors.forEach((sector, i) => {
+            const tmp = (obj.findIndex(v => v.sector === sector) + 1);
+            res[sector] = (res[sector] || []).concat(tmp);
+        });
+    });
+    return res;
+}
 const Stats = () => {
     const sectors = Object.keys(data);
-    console.log(sectors)
+    const finalStat = Object.entries(prepareState(sectors));
+    console.log(finalStat)
     return (
         <>
             <StatsContainer>
@@ -76,6 +71,30 @@ const Stats = () => {
                         </StatsItem>
                     )
                 })}
+                <StatsItem>
+                    <h3>Stat</h3>
+                    <table>
+                        <thead>
+                            <th>Sector</th>
+                            <th>Position</th>
+                        </thead>
+                        <tbody>
+                            {
+                                finalStat.map((stat) => {
+                                    const [sector, pos] = stat;
+                                    return (
+                                        <>
+                                            <tr>
+                                                <td>{sector}</td>
+                                                <td>{pos.reverse().toString()}</td>
+                                            </tr>
+                                        </>
+                                    );
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </StatsItem>
             </StatsContainer>
         </>
     )
