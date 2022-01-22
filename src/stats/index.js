@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import data from './data.json';
-import { StatsContainer, StatsItem } from './style'
+import { StatsContainer, StatsItem, PositionContainer } from './style'
 const prepareObj = (sectors, index) => {
     return sectors.reduce((acc, sector) => {
         const rtn = data[sector][index];
@@ -46,17 +47,62 @@ const prepareState = (sectors) => {
     let res = {};
     Array.from({ length: 23 }, (_, index) => {
         const obj = prepareObj(sectors, index);
-        sectors.forEach((sector, i) => {
+        sectors.forEach((sector) => {
             const tmp = (obj.findIndex(v => v.sector === sector) + 1);
             res[sector] = (res[sector] || []).concat(tmp);
         });
     });
     return res;
 }
+const Position = ({ points }) => {
+    const revPoints = useMemo(() => points.slice().reverse(), []);
+    return (
+        <>
+            <PositionContainer>
+                {
+                    revPoints.map((point) => {
+                        return (
+                            <div className={`positionItem ${!point ? 'invalid' : ''}`}>{point}</div>
+                        )
+                    })
+                }
+            </PositionContainer>
+        </>
+    )
+
+}
+
+const FinalStat = ({ finalStat }) => {
+    return (
+        <>
+            <table>
+                <thead>
+                    <th>Sector</th>
+                    <th>Position</th>
+                </thead>
+                <tbody>
+                    {
+                        finalStat.map((stat) => {
+                            const [sector, pos] = stat;
+                            return (
+                                <>
+                                    <tr>
+                                        <td>{sector}</td>
+                                        <td><Position points={pos} /></td>
+                                    </tr>
+                                </>
+                            );
+                        })
+                    }
+                </tbody>
+            </table>
+        </>
+    )
+};
 const Stats = () => {
     const sectors = Object.keys(data);
     const finalStat = Object.entries(prepareState(sectors));
-    console.log(finalStat)
+
     return (
         <>
             <StatsContainer>
@@ -73,27 +119,7 @@ const Stats = () => {
                 })}
                 <StatsItem>
                     <h3>Stat</h3>
-                    <table>
-                        <thead>
-                            <th>Sector</th>
-                            <th>Position</th>
-                        </thead>
-                        <tbody>
-                            {
-                                finalStat.map((stat) => {
-                                    const [sector, pos] = stat;
-                                    return (
-                                        <>
-                                            <tr>
-                                                <td>{sector}</td>
-                                                <td>{pos.reverse().toString()}</td>
-                                            </tr>
-                                        </>
-                                    );
-                                })
-                            }
-                        </tbody>
-                    </table>
+                    <FinalStat finalStat={finalStat} />
                 </StatsItem>
             </StatsContainer>
         </>
