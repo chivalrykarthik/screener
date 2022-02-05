@@ -5,6 +5,9 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const path = './../../public/points';
 
+/*
+ Handle async operations
+*/
 const handlePromise = async (fn, ...params) => {
     try {
         const res = await fn(...params)
@@ -12,9 +15,11 @@ const handlePromise = async (fn, ...params) => {
     } catch (e) {
         console.log("Error:" + e.message)
     }
-
 }
 
+/*
+ Read all the directories from given path
+*/
 const readAllDir = async (dir) => {
     try {
         const list = await handlePromise(readdir, dir);
@@ -33,6 +38,9 @@ const processData = (dt) => {
     return Number(((endPrice - startingPrice) / startingPrice) * 100).toFixed(2);
 }
 
+/*
+ Read data from list of files
+*/
 const readFilerecursive = async (files, dir, index = 0) => {
     try {
         if (files.length <= index) return [];
@@ -49,6 +57,9 @@ const readFilerecursive = async (files, dir, index = 0) => {
     }
 }
 
+/*
+ Read all the files from list of directories
+*/
 const readDirRecursive = async (dirList, index = 0) => {
     try {
         if (dirList.length <= index) return [];
@@ -65,6 +76,9 @@ const readDirRecursive = async (dirList, index = 0) => {
     }
 };
 
+/*
+ Write data in to JSON
+*/
 const writeData = async (dt) => {
     try {
         const res = await handlePromise(writeFile, './data.json', JSON.stringify(dt), 'utf8');
