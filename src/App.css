@@ -54,6 +54,10 @@ table {
   color: white;
 }
 
+.fin {
+  background: tomato;
+  color: white;
+}
 th {
   font-weight: bold;
   font-size: 0.79rem;
