@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from './../store';
 import TblView from './../view/TblView';
-import { cols, colsOrder, rankCols } from './constants'
+import { cols, colsOrder, rankCols, allowNegative } from './constants'
 import { ModalContainer, ModalBody, ModalClose, Content } from './../bestPick/Style';
 
 
@@ -16,13 +16,21 @@ const round5 = (num) => {
 
 const addRank = (store, rankCols) => {
     const fields = rankCols;
-    const asc = (v1, v2) => parseFloat(v1) - parseFloat(v2);
-    const desc = (v1, v2) => parseFloat(v2) - parseFloat(v1);
+    const infi = (val, isAsc) => {
+        if (isNaN(parseFloat(val))) {
+            console.log("val===" + val)
+            return isAsc ? Infinity : -Infinity;
+        }
+        return val;
+    }
+    const asc = (v1, v2) => infi(parseFloat(v1), true) - infi(parseFloat(v2), true);
+    const desc = (v1, v2) => infi(parseFloat(v2), false) - infi(parseFloat(v1), false);
+
     for (let i = 0; i < fields.length; i++) {
         const field = fields[i].split('#');
         const col = field[0];
         const isAsc = field.length > 1 ? true : false;
-        store.stocks.sort((a, b) => isAsc && a.filters[col] > 0 && b.filters[col] > 0 ? asc(a.filters[col], b.filters[col]) : desc(a.filters[col], b.filters[col]));
+        store.stocks.sort((a, b) => isAsc && ((a.filters[col] > 0 && b.filters[col] > 0) || allowNegative.includes(col)) ? asc(a.filters[col], b.filters[col]) : desc(a.filters[col], b.filters[col]));
         for (let i = 0; i < store.stocks.length; i++) {
             store.stocks[i].filters['Rank'] = (store.stocks[i].filters['Rank'] || 0) + (i + 1);
             store.stocks[i].filters[col + 'Rank'] = i + 1;

@@ -20,3 +20,5 @@ export const cols = {
 export const colsOrder = ['qqp', 'qqs', 'yyp', 'yys', 'eps', 'npm', 'opm', 'sales', 'roe', 'roce', 'cashFlow', 'debt', 'pe', 'ey'];
 
 export const rankCols = ['EarningsYield', 'ROCE'];
+
+export const allowNegative = ['mc50', 'mcpd50', 'mc200', 'mc200Diff', 'mc1', 'GN'];
