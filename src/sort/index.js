@@ -16,9 +16,9 @@ const round5 = (num) => {
 
 const addRank = (store, rankCols) => {
     const fields = rankCols;
+
     const infi = (val, isAsc) => {
         if (isNaN(parseFloat(val))) {
-            console.log("val===" + val)
             return isAsc ? Infinity : -Infinity;
         }
         return val;
@@ -30,10 +30,18 @@ const addRank = (store, rankCols) => {
         const field = fields[i].split('#');
         const col = field[0];
         const isAsc = field.length > 1 ? true : false;
-        store.stocks.sort((a, b) => isAsc && ((a.filters[col] > 0 && b.filters[col] > 0) || allowNegative.includes(col)) ? asc(a.filters[col], b.filters[col]) : desc(a.filters[col], b.filters[col]));
-        for (let i = 0; i < store.stocks.length; i++) {
-            store.stocks[i].filters['Rank'] = (store.stocks[i].filters['Rank'] || 0) + (i + 1);
-            store.stocks[i].filters[col + 'Rank'] = i + 1;
+        const tmpStore = JSON.parse(JSON.stringify(store));
+        tmpStore.stocks.sort((a, b) => isAsc && ((a.filters[col] > 0 && b.filters[col] > 0) || allowNegative.includes(col)) ? asc(a.filters[col], b.filters[col]) : desc(a.filters[col], b.filters[col]));
+        for (let i = 0; i < tmpStore.stocks.length; i++) {
+            const nm = tmpStore.stocks[i].Name;
+
+            store.stocks.forEach(function (st, k) {
+                if (st.Name === nm) {
+                    store.stocks[k].filters['Rank'] = (store.stocks[k].filters['Rank'] || 0) + (i + 1);
+                    store.stocks[k].filters[col + 'Rank'] = i + 1;
+                    return;
+                }
+            })
         }
     }
 
