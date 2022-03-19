@@ -58,6 +58,11 @@ table {
   background: tomato;
   color: white;
 }
+
+.gov {
+  background: hsl(34, 100%, 64%);
+  color: white;
+}
 th {
   font-weight: bold;
   font-size: 0.79rem;

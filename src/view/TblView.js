@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import action from './../store/action';
 import operators from './../operators';
 import { Avg } from './../Styles/Table';
-import { COLOR, BANKS, FIN_SERVICE, INS } from './../constants'
+import { COLOR, BANKS, FIN_SERVICE, INS, GOV } from './../constants'
 
 import './../Tbl.css';
 const Heading = ({ stocks, average, dispatch, selectAll }) => {
@@ -114,9 +114,11 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispat
     }
     const finList = [...BANKS, ...FIN_SERVICE, ...INS];
     const isFin = finList.includes(Name);
+    const isGov = BANKS.includes(Name);
+    const filterClass = isFin ? 'fin' : (isGov ? 'gov' : '')
     return (
         <>
-            <td className={`${isHighlight ? 'highlight' : ''} ${isFin ? 'fin' : ''}`}>
+            <td className={`${isHighlight ? 'highlight' : ''} ${filterClass}`}>
                 <input type="checkbox" onChange={checkHighlight} />
                 {Name}
             </td>
