@@ -114,7 +114,7 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispat
     }
     const finList = [...BANKS, ...FIN_SERVICE, ...INS];
     const isFin = finList.includes(Name);
-    const isGov = BANKS.includes(Name);
+    const isGov = GOV.includes(Name);
     const filterClass = isFin ? 'fin' : (isGov ? 'gov' : '')
     return (
         <>
