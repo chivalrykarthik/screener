@@ -64,6 +64,7 @@ const Rows = ({ rowNum, label, value, checked }) => {
                     <option value='LT'>Less than</option>
                     <option value='GTA'>Greater than AVG</option>
                     <option value='LTA'>Less than AVG</option>
+                    <option value='SYMB'>Find Symb</option>
                 </select>
             </div>
             <div style={{ width: '33%' }}>
