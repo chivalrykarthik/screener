@@ -132,7 +132,7 @@ const Col = ({ stock, rowNum, average, filtersCnt, searchParams, compare, dispat
                     </td>);
                 })
             }
-            <td className={isHighlight ? 'highlight' : ''} style={calcPercent(cnt)}>{cnt}</td>
+            <td className={isHighlight ? 'highlight matches' : 'matches'} style={calcPercent(cnt)}>{cnt}</td>
             <td><button onClick={handleDelete.bind(null, rowNum)}>Delete</button></td>
         </>
     )
@@ -181,9 +181,19 @@ const Tbl = (
         }
         setSelectAll(!isSelectAll);
     }
+    const deleteNomatch = () => {
+        document.querySelectorAll('.matches').forEach(v => {
+            if (v.innerText === '0') {
+                setTimeout(() => {
+                    v.parentNode.firstChild.querySelector('input').click()
+                }, 100);
+            }
+        })
+    }
     return (
         <>
             <button onClick={handleDelete} >Delete</button>
+            <button onClick={deleteNomatch} >Select No Match</button>
             <table border="1">
                 <thead>
                     <tr>
