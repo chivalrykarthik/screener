@@ -5,22 +5,28 @@ import { Provider } from './store';
 
 import Screener from './Screener';
 import Charts from './charts';
+import Fp from './fp';
 function App() {
   const [showChart, setChart] = useState(false);
+  const [showFp, setFp] = useState(false);
   const handleChart = () => {
     setChart(!showChart);
+  }
+  const handleFP = () => {
+    setFp(!showFp);
   }
   return (
     <>
       <Header>
         <div>
-          <button onClick={handleChart} >Show Chart</button>
+          <button onClick={handleChart} >Show Chart</button> &nbsp;
+		  <button onClick={handleFP} >FP</button>
         </div>
         <div>v2.1.18</div>
       </Header>
-      <Container showChart={showChart}>
-        {showChart ? <Charts /> : <Screener />}
-      </Container>
+      <Container showChart={showChart || showFp}>
+        {showChart ? <Charts /> : showFp ? <Fp />: <Screener />}		
+      </Container>	  
     </>
   );
 }
