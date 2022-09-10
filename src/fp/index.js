@@ -74,9 +74,9 @@ const processData =(data)=>{
 	})
 }
 
-const View = ({symbol})=>{
+const View = ({symbol,data})=>{
 	const [showSymb, setSymb] = useState(false);
-	const {up,down,eq} = checkPosition(res[symbol]);
+	const {up,down,eq} = checkPosition(data[symbol]);
 	const handleClick =()=>{
 		setSymb(!showSymb);
 	}
@@ -89,28 +89,56 @@ const View = ({symbol})=>{
 			{
 			showSymb && <DataTable
 				columns={columns}
-				data={res[symbol]}
+				data={data[symbol]}
 				conditionalRowStyles={conditionalRowStyles}
 			/>
 			}
 		</>
 	)
 }
-const Fp =()=>{
-	const symbols = Object.keys(res);
+const LoadData =({data})=>{
+	const symbols = Object.keys(data);
 	return(
 		<Container>
 			{
 				symbols.map(symbol=>{
-					if(res[symbol].length){
+					if(data[symbol].length){
 						
-						const dt = processData(res[symbol]);
+						const dt = processData(data[symbol]);
 						return (
 							<>
-								<View symbol= {symbol} />
+								<View symbol= {symbol} data={data} />
 							</>
 						)
 					}
+				})
+			}
+		</Container>
+	);
+}
+
+const ProcessDays = ({day,data})=>{
+	const [showData, setShowData] = useState(false);
+	const handleClick = ()=>{
+		setShowData(!showData);
+	}
+	return (
+		<>
+			<div className ='headingContainer' onClick = {handleClick}>{day}</div>
+			{showData && <LoadData data= {data[day]} />} 
+		</>
+	)
+}
+
+const Fp =()=>{
+	
+	return(
+		<Container>
+			{
+				res.map(data=>{
+						const day = Object.keys(data);						
+						const len = Object.keys(data[day[0]]).length;
+						return !!len && <ProcessDays day = { day } data={data}/>
 				})
 			}
 		</Container>
