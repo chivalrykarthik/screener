@@ -9,6 +9,10 @@ const columns = [
         name: 'Date',
         selector: row => row.match[0].srcDate,
     },
+	{
+		name: 'MDate',
+        selector: row => row.match[0].mtDate,
+	},
     {
         name: 'Symbol',
         selector: row => row.match[0].mtSymbol,
