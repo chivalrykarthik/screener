@@ -22,7 +22,7 @@ function App() {
           <button onClick={handleChart} >Show Chart</button> &nbsp;
 		  <button onClick={handleFP} >FP</button>
         </div>
-        <div>v2.1.20</div>
+        <div>v2.1.21</div>
       </Header>
       <Container showChart={showChart || showFp}>
         {showChart ? <Charts /> : showFp ? <Fp />: <Screener />}		
