@@ -28,6 +28,19 @@ const columns = [
 	{
         name: 'Diff',
         selector: row => row.match[0].diff,
+    },
+	
+	{
+        Five: 'Diff',
+        selector: row => row.match[0].fifth,
+    },
+	{
+        Ten: 'Diff',
+        selector: row => row.match[0].tenth,
+    },
+	{
+        Fourteen: 'Diff',
+        selector: row => row.match[0].fourteenth,
     }
 ];
 
