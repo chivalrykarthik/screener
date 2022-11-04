@@ -31,15 +31,15 @@ const columns = [
     },
 	
 	{
-        Five: 'Diff',
+        name: 'Five',
         selector: row => row.match[0].fifth,
     },
 	{
-        Ten: 'Diff',
+        name: 'Ten',
         selector: row => row.match[0].tenth,
     },
 	{
-        Fourteen: 'Diff',
+        name: 'Fourteen',
         selector: row => row.match[0].fourteenth,
     }
 ];
