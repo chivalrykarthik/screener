@@ -666,5 +666,6 @@ export const GOV = ['Agro Dutch Inds.',
     'Vijaya Bank',
     'Gujarat Gas',
     'Guj Inds. Power',
-    'Guj.St.Petronet'
+    'Guj.St.Petronet',
+    'Life Insurance'
 ];
